@@ -24,12 +24,11 @@ Material:
     RenderType: Transparent
   disabledShaderPasses:
   - DistortionVectors
-  - MOTIONVECTORS
+  - DepthOnly
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
   - SHADOWCASTER
-  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
