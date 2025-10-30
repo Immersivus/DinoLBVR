@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8969328774578514151
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a276c07f90b6e6478f5a3f52541f130, type: 3}
+  m_Name: ReferencedTimelineClip(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  Reference:
+    _serializedGuid: 86bf952ced0bcb419e8cf0b516c5f5cb
+    _cachedName: TIMELINE DOOR OPEN
+    _cachedScene: 06_Dino_Tree
 --- !u!114 &-8864246373446686361
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -44,7 +60,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 78.75
+    m_Start: 89.91666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -2551605418651452729}
     m_Duration: 2.11666666666666
@@ -113,7 +129,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Active
   - m_Version: 1
-    m_Start: 336.6833333333332
+    m_Start: 348.71666666666647
     m_ClipIn: 0
     m_Asset: {fileID: -7125367878600990067}
     m_Duration: 4
@@ -449,7 +465,7 @@ MonoBehaviour:
     m_Start: 74
     m_ClipIn: 0
     m_Asset: {fileID: -772163279666999383}
-    m_Duration: 5
+    m_Duration: 17.03333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -515,7 +531,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Exterior Site Transition Start
   - m_Version: 1
-    m_Start: 79
+    m_Start: 91.03333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -4826664047721934321}
     m_Duration: 5
@@ -584,7 +600,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: BlackRoom
   - m_Version: 1
-    m_Start: 84
+    m_Start: 96.03333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 567440082482663700}
     m_Duration: 41.18333333333334
@@ -653,7 +669,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Jungle Bridge
   - m_Version: 1
-    m_Start: 125.18333333333334
+    m_Start: 137.2166666666667
     m_ClipIn: 0
     m_Asset: {fileID: 949715990154065446}
     m_Duration: 2
@@ -722,7 +738,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Jungle Tree
   - m_Version: 1
-    m_Start: 127.18333333333337
+    m_Start: 139.2166666666667
     m_ClipIn: 0
     m_Asset: {fileID: -53924245803853029}
     m_Duration: 5
@@ -773,7 +789,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Jungle Rex
   - m_Version: 1
-    m_Start: 132.18333333333322
+    m_Start: 144.21666666666658
     m_ClipIn: 0
     m_Asset: {fileID: 291690597126321735}
     m_Duration: 2
@@ -824,7 +840,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Jungle Cave
   - m_Version: 1
-    m_Start: 134.18333333333328
+    m_Start: 146.21666666666664
     m_ClipIn: 0
     m_Asset: {fileID: 2690444803282010971}
     m_Duration: 50
@@ -875,7 +891,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Cliff
   - m_Version: 1
-    m_Start: 184.18333333333322
+    m_Start: 196.21666666666658
     m_ClipIn: 0
     m_Asset: {fileID: 840604953979900646}
     m_Duration: 7
@@ -926,7 +942,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Shrink
   - m_Version: 1
-    m_Start: 191.18333333333322
+    m_Start: 203.21666666666658
     m_ClipIn: 0
     m_Asset: {fileID: -8864246373446686361}
     m_Duration: 23
@@ -935,76 +951,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: SkyFlightEnter
-  - m_Version: 1
-    m_Start: 214.18333333333322
-    m_ClipIn: 0
-    m_Asset: {fileID: 7506043063247957022}
-    m_Duration: 60
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -7641996738057924466}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
+    m_BlendOutDuration: 0
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1044,9 +991,42 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
+    m_DisplayName: SkyFlightEnter
+  - m_Version: 1
+    m_Start: 226.21666666666653
+    m_ClipIn: 0
+    m_Asset: {fileID: 7506043063247957022}
+    m_Duration: 60
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -7641996738057924466}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
     m_DisplayName: SkyFlight360
   - m_Version: 1
-    m_Start: 274.1833333333332
+    m_Start: 286.21666666666647
     m_ClipIn: 0
     m_Asset: {fileID: -1534913620723825777}
     m_Duration: 5
@@ -1054,7 +1034,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: -1
+    m_BlendInDuration: 0
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -1079,7 +1059,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Deep Ocean Enter
   - m_Version: 1
-    m_Start: 279.1833333333332
+    m_Start: 291.21666666666647
     m_ClipIn: 0
     m_Asset: {fileID: -2420949845216420564}
     m_Duration: 60.00000000000003
@@ -1088,7 +1068,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0
+    m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1112,7 +1092,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Deep Ocean
   - m_Version: 1
-    m_Start: 339.1833333333332
+    m_Start: 351.21666666666647
     m_ClipIn: 0
     m_Asset: {fileID: 8918567931915288161}
     m_Duration: 5.0166666666666515
@@ -1120,7 +1100,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
+    m_BlendInDuration: -1
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -1163,7 +1143,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: BlackRoom 2
   - m_Version: 1
-    m_Start: 344.1999999999999
+    m_Start: 356.2333333333331
     m_ClipIn: 0
     m_Asset: {fileID: 1220633792343118507}
     m_Duration: 60
@@ -1232,7 +1212,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Digging Site 2
   - m_Version: 1
-    m_Start: 404.1999999999999
+    m_Start: 416.2333333333331
     m_ClipIn: 0
     m_Asset: {fileID: 1820865391487249378}
     m_Duration: 1
@@ -1306,7 +1286,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 214.18333333333322
+    m_Start: 226.21666666666653
     m_ClipIn: 0
     m_Asset: {fileID: 7676169547922497585}
     m_Duration: 60
@@ -1602,7 +1582,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 212.2999999999999
+    m_Start: 224.33333333333326
     m_ClipIn: 0
     m_Asset: {fileID: 5335186997140017452}
     m_Duration: 4
@@ -1689,7 +1669,7 @@ MonoBehaviour:
   ResumeFromAdminUI: 0
   Preset: {fileID: 11400000, guid: bc27778ebbcb8eb43a95e17c77daef67, type: 2}
   StateId: b19c1e22-a7b0-4fff-9e92-54bf4b9283d9
-  PauseOnFinish: 1
+  PauseOnFinish: 0
   AutomaticResume: 0
   PauseDuration: 0
   ResumeType: 0
@@ -1766,10 +1746,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 75.86666666666666
+    m_Start: 87.64999999999999
     m_ClipIn: 0
     m_Asset: {fileID: 1156675165928547942}
-    m_Duration: 3.13333333333334
+    m_Duration: 4.816666666666677
     m_TimeScale: 1
     m_ParentTrack: {fileID: 161382320881059521}
     m_EaseInDuration: 0
@@ -1835,7 +1815,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Transition Portal 1
   - m_Version: 1
-    m_Start: 337.24999999999994
+    m_Start: 349.2833333333332
     m_ClipIn: 0
     m_Asset: {fileID: 6919497924274520047}
     m_Duration: 4
@@ -2124,7 +2104,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 184.18333333333322
+    m_Start: 196.21666666666655
     m_ClipIn: 0
     m_Asset: {fileID: -2542411359536395763}
     m_Duration: 30
@@ -2262,9 +2242,78 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: TentDoorsOpen
   - m_Version: 1
-    m_Start: 123.21666666666667
+    m_Start: 135.25
     m_ClipIn: 0
     m_Asset: {fileID: 4224056602931381042}
+    m_Duration: 1.9666666666666686
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 2636950321285269522}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: TreeEnterOpen
+  - m_Version: 1
+    m_Start: 140.03333333333333
+    m_ClipIn: 0
+    m_Asset: {fileID: -8969328774578514151}
     m_Duration: 1.9666666666666686
     m_TimeScale: 1
     m_ParentTrack: {fileID: 2636950321285269522}
@@ -2459,7 +2508,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 274.10833333333284
+    m_Start: 286.1416666666661
     m_ClipIn: 0
     m_Asset: {fileID: 1240405967687733774}
     m_Duration: 65.07500000000036
@@ -2492,7 +2541,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Environment Underwater Clip
   - m_Version: 1
-    m_Start: 344.1999999999999
+    m_Start: 356.2333333333331
     m_ClipIn: 0
     m_Asset: {fileID: -4358221371654270099}
     m_Duration: 60
@@ -2528,7 +2577,7 @@ MonoBehaviour:
     m_Start: 1
     m_ClipIn: 0
     m_Asset: {fileID: -3827172008896800091}
-    m_Duration: 77.99999999999997
+    m_Duration: 89.78333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4780974452702939109}
     m_EaseInDuration: 0
@@ -2558,7 +2607,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Environment Exterior Site Clip
   - m_Version: 1
-    m_Start: 84
+    m_Start: 96.03333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 3507616128577513476}
     m_Duration: 50.18333333333334
@@ -2591,7 +2640,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Environment Jungle Clip
   - m_Version: 1
-    m_Start: 134.18333333333328
+    m_Start: 146.21666666666664
     m_ClipIn: 0
     m_Asset: {fileID: -5923201371953599152}
     m_Duration: 80
@@ -2681,7 +2730,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 214.18333333333322
+    m_Start: 226.21666666666653
     m_ClipIn: 0
     m_Asset: {fileID: -2476310851245774527}
     m_Duration: 59.92499999999964
@@ -2774,7 +2823,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 272.03333333333325
+    m_Start: 284.0666666666665
     m_ClipIn: 0
     m_Asset: {fileID: -6073624662630695038}
     m_Duration: 4
