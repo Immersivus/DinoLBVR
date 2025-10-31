@@ -7,6 +7,7 @@ public class PicoHandGrab : MonoBehaviour
 {
     [SerializeField] GameObject parent;
     [SerializeField] Vector3 startingPosition;
+    [SerializeField] Vector3 snapPosition;
     [SerializeField] Quaternion startingRotation;
 
     private void Start()
@@ -22,5 +23,11 @@ public class PicoHandGrab : MonoBehaviour
             transform.localPosition = startingPosition;
             transform.localRotation = startingRotation;
         }
+    }
+
+    public void ResetPosition()
+    {
+        transform.localPosition = snapPosition;
+        transform.localRotation = Quaternion.Euler(-180f, 0f, 90f);
     }
 }
