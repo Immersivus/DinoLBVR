@@ -1550,6 +1550,10 @@
       <Project>{9E977B04-DBC3-C221-E5C3-BFA3085328C8}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="AVProVideo.Demos.csproj">
+      <Project>{83093B64-C3DD-DF3F-6E1D-BAABAAF5A122}</Project>
+      <Name>AVProVideo.Demos</Name>
+    </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Editor.ShaderGraph.csproj">
       <Project>{6AC18A91-AA38-BDD2-9458-2C6CC71A346C}</Project>
       <Name>AmazingAssets.AdvancedDissolve.Editor.ShaderGraph</Name>
@@ -1578,9 +1582,21 @@
       <Project>{14DB1699-2372-F6A1-4AC7-BF18BC0979EB}</Project>
       <Name>Unity.ShaderGraph.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.csproj">
+      <Project>{F6E5E42E-A32F-D1A7-3DB6-120779240652}</Project>
+      <Name>AVProVideo.Extensions.UnityUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.VisualEffectGraph.csproj">
+      <Project>{D9562AC2-1AD8-A62A-46D1-04B988891ADB}</Project>
+      <Name>AVProVideo.Extensions.VisualEffectGraph</Name>
+    </ProjectReference>
     <ProjectReference Include="Tayx.Graphy.csproj">
       <Project>{E648316F-3088-6FAD-5EBB-DC7A7D156036}</Project>
       <Name>Tayx.Graphy</Name>
+    </ProjectReference>
+    <ProjectReference Include="_AVProVideo.Extensions.VideoPlayer.Editor.csproj">
+      <Project>{9E1FAD97-F875-EBBC-8163-22EBC9EBED52}</Project>
+      <Name>_AVProVideo.Extensions.VideoPlayer.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Editor.csproj">
       <Project>{8C662764-0C4F-5F20-4935-43212D7EB28A}</Project>
@@ -1606,9 +1622,25 @@
       <Project>{D6677D8B-7F3B-E8FA-1652-BE2AE436FEF3}</Project>
       <Name>BlobShadow</Name>
     </ProjectReference>
+    <ProjectReference Include="_AVProVideo.Extensions.VideoPlayer.csproj">
+      <Project>{6E1D0752-5CD0-3018-FF5C-A188B5046B07}</Project>
+      <Name>_AVProVideo.Extensions.VideoPlayer</Name>
+    </ProjectReference>
     <ProjectReference Include="XRoam.Installer.csproj">
       <Project>{867EE5A7-3E26-6EA0-5756-CCF1DC34D28A}</Project>
       <Name>XRoam.Installer</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.Timeline.csproj">
+      <Project>{205196CB-A59F-115F-4C5D-17C048174863}</Project>
+      <Name>AVProVideo.Extensions.Timeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.Editor.csproj">
+      <Project>{B91ADFFC-5DFC-F2D0-2209-E581DB6C70C0}</Project>
+      <Name>AVProVideo.Extensions.UnityUI.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Runtime.csproj">
+      <Project>{53A7CCF8-12E8-DA48-FD5C-984E0D35D7DD}</Project>
+      <Name>AVProVideo.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="GameKit.Dependencies.csproj">
       <Project>{03536507-BF00-0712-0B78-7A6A9A6CC198}</Project>
@@ -1641,6 +1673,10 @@
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Examples.csproj">
       <Project>{27DF1351-EFF5-5E49-6523-6816CA7FD300}</Project>
       <Name>AmazingAssets.AdvancedDissolve.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Editor.csproj">
+      <Project>{9EDDBF61-C168-044E-7157-3B4A57B45419}</Project>
+      <Name>AVProVideo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="OpenVATEditor.csproj">
       <Project>{AFD6C8A6-A436-F301-3F1E-BD544D1E41F8}</Project>
