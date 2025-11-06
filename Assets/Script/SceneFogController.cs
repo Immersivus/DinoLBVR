@@ -12,10 +12,15 @@ public class SceneFogController : MonoBehaviour
     {
         RenderSettings.fog = enableFog;
         RenderSettings.fogMode = fogMode;
-        RenderSettings.fogDensity = density;
+    
         RenderSettings.fogColor = fogColor;
     }
+    void Update()
+    {
 
+        RenderSettings.fogDensity = density;
+
+    }
     void OnDisable()
     {
         // reset when leaving scene
