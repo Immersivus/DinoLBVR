@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Hands;
@@ -12,6 +13,7 @@ public class PicoHandGrab : MonoBehaviour
     [SerializeField] Vector3 snapPositionLeft;
     [SerializeField] Quaternion startingRotation;
 
+    [SerializeField] List<GameObject> stuffToEnable;
     private void Start()
     {
         startingPosition = gameObject.transform.localPosition;
@@ -24,6 +26,11 @@ public class PicoHandGrab : MonoBehaviour
             transform.SetParent(parent.transform);
             transform.localPosition = startingPosition;
             transform.localRotation = startingRotation;
+
+            foreach(var obj in stuffToEnable)
+            {
+                obj.SetActive(true);
+            }
         }
     }
 
