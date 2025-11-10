@@ -152,6 +152,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cf721044c4b301408a2217f2e0b560b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6208376115780117069}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cf721044c4b301408a2217f2e0b560b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 850876524057248501}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cf721044c4b301408a2217f2e0b560b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6055832094906657665}
   m_SourcePrefab: {fileID: 100100000, guid: 6cf721044c4b301408a2217f2e0b560b, type: 3}
 --- !u!1 &5873444789323316915 stripped
 GameObject:
@@ -180,3 +186,65 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &850876524057248501
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5873444789323316915}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2606909, y: 0.10085735, z: 0.33033556}
+  m_Center: {x: 0.0023021838, y: 0.040071864, z: 0.0012066662}
+--- !u!114 &6055832094906657665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5873444789323316915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f1cdea3e544c04cad7d337b70d7e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 00000000-0000-0000-0000-000000000000
+  _bodyPartType: 2
+  _usersGroupLayerMask: -1
+  _synchronized: 0
+  _oneUseOnly: 0
+  OnEnterActions:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6208376115780117069}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OPEN
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnExitActions:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAllUsersEnterActions:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAllUsersExitActions:
+    m_PersistentCalls:
+      m_Calls: []
