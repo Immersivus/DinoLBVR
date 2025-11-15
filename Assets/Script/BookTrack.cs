@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class BookTrack : MonoBehaviour
 {
-    [SerializeField] List<GameObject> books;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] List<GameObject> bookVideos;
+
+    [SerializeField] GameObject bookObject;
+
+
+    Transform playerTransform;
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
@@ -13,23 +18,31 @@ public class BookTrack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(playerTransform == null)
+        {
+            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+        else
+        {
+            Vector3 newPosition = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
+            transform.position = newPosition;
+            transform.rotation = playerTransform.rotation;
+        }
     }
 
 
     public void ActivateBook(int index)
     {
-        if (!books[index].activeSelf)
+        if (!bookVideos[index].activeSelf)
         {
-            foreach (var book in books)
+            foreach (var book in bookVideos)
             {
                 book.SetActive(false);
             }
 
-            books[index].SetActive(true);
-
-            books[index].GetComponent<Animator>().SetTrigger("APPEAR");
+            bookVideos[index].SetActive(true);
+          
         }
-       
+        bookObject.GetComponent<Animator>().SetTrigger("APPEAR");
     }
 }

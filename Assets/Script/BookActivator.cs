@@ -20,7 +20,8 @@ public class BookActivator : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<BookTrack>().ActivateBook(indexToActivate);
+            GameObject bookHolder = GameObject.FindGameObjectWithTag("BookHolder");
+            bookHolder.GetComponent<BookTrack>().ActivateBook(indexToActivate);
         }
     }
 }
