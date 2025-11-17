@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +8,11 @@ public class BookTrack : MonoBehaviour
 
     [SerializeField] GameObject bookObject;
 
-
+    bool tracking;
     Transform playerTransform;
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private float _fadeDuration = 100.0f;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
@@ -24,12 +27,25 @@ public class BookTrack : MonoBehaviour
         }
         else
         {
+            if (!tracking)
+            {
+                StartCoroutine(MoveToPlayer());
+                tracking = true;
+            }
+
             Vector3 newPosition = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
             transform.position = newPosition;
-            transform.rotation = playerTransform.rotation;
         }
     }
 
+    IEnumerator MoveToPlayer()
+    {
+        while (true)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, playerTransform.rotation, Time.deltaTime);
+            yield return null;
+        }
+    }
 
     public void ActivateBook(int index)
     {
