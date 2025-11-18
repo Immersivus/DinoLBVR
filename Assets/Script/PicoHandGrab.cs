@@ -34,6 +34,15 @@ public class PicoHandGrab : MonoBehaviour
         }
     }
 
+    public void DisableOnHologram()
+    {
+        transform.SetParent(parent.transform);
+        transform.localPosition = startingPosition;
+        transform.localRotation = startingRotation;
+
+        gameObject.GetComponent<ColliderController>().enabled = false;
+    }
+
     public void ResetPosition(Transform interactor)
     {
         

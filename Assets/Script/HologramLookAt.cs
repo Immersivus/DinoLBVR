@@ -1,13 +1,15 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class HologramLookAt : MonoBehaviour
 {
 
     Transform playerHead;
+
+    [SerializeField] PicoHandGrab pickaxe;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnAwake()
     {
-        
+        pickaxe.DisableOnHologram();
     }
 
     // Update is called once per frame
