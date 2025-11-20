@@ -23,7 +23,7 @@ public class BookTrack : MonoBehaviour
     {
         if(playerTransform == null)
         {
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            playerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
         else
         {

@@ -16,12 +16,9 @@ public class BookActivator : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void ActivateBook()
     {
-        if (other.CompareTag("Player"))
-        {
-            GameObject bookHolder = GameObject.FindGameObjectWithTag("BookHolder");
-            bookHolder.GetComponent<BookTrack>().ActivateBook(indexToActivate);
-        }
+        GameObject bookHolder = GameObject.FindGameObjectWithTag("BookHolder");
+        bookHolder.GetComponent<BookTrack>().ActivateBook(indexToActivate);
     }
 }
