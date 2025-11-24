@@ -6,7 +6,7 @@ public class JellyInteraction : MonoBehaviour
     public float buoyancy;
     public float wobbleAmount;
     public float wobbleSpeed;
-
+   
     private Rigidbody rb;
     private float wobbleTimer;
 
@@ -27,6 +27,7 @@ public class JellyInteraction : MonoBehaviour
             wobbleTimer -= Time.deltaTime;
         }
     }
+
 
     public void OnTouched(Transform toucher)
     {
