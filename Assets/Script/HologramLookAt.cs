@@ -9,7 +9,10 @@ public class HologramLookAt : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnAwake()
     {
-        pickaxe.DisableOnHologram();
+        if (gameObject.CompareTag("Untagged"))
+        {
+            pickaxe.DisableOnHologram();
+        }
     }
 
     // Update is called once per frame
