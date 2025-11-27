@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5778942386045462351}
-  - component: {fileID: 6777349021581934250}
   - component: {fileID: 6906385804662158009}
   - component: {fileID: 6055055933128083392}
   - component: {fileID: 6464376455159267415}
@@ -36,21 +35,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 478412986872490549}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!114 &6777349021581934250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204837564142184685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e337d357c0887bf4ab51b4f536465df1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _visual: {fileID: 0}
-  Target: {fileID: 5778942386045462351}
-  DisableLineOnEnter: 0
 --- !u!114 &6906385804662158009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,13 +51,10 @@ MonoBehaviour:
   scaleMode: 0
   color: {r: 1, g: 1, b: 1, a: 1}
   detailLevel: 2
-  culling: 0
-  boundsPadding: 0
   renderQueue: -1
   zTest: 4
   zOffsetFactor: 0
   zOffsetUnits: 0
-  colorMask: 15
   stencilComp: 8
   stencilOpPass: 0
   stencilRefID: 0
@@ -186,7 +167,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 478412986872490549}
-  - component: {fileID: 6032068092574767752}
   m_Layer: 0
   m_Name: Targets
   m_TagString: Untagged
@@ -211,23 +191,6 @@ Transform:
   - {fileID: 5778942386045462351}
   m_Father: {fileID: 1597735321837922506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6032068092574767752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516239446629021099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b52ee2664448cc4490374d7f8450c15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineReference: {fileID: 6965903086678718306, guid: 24539b6f235ce244b9373a85b4919398, type: 3}
-  zones:
-  - {fileID: 2918755964827594352}
-  - {fileID: 6777349021581934250}
-  lineAnimationSpeed: 1
 --- !u!1 &7485925333530711426
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +232,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4776814318617973865}
-  - component: {fileID: 2918755964827594352}
   - component: {fileID: 7133323252474396062}
   - component: {fileID: 7487399147750296889}
   - component: {fileID: 5398921146721578787}
@@ -296,21 +258,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 478412986872490549}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!114 &2918755964827594352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8099270624586723146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e337d357c0887bf4ab51b4f536465df1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _visual: {fileID: 0}
-  Target: {fileID: 4776814318617973865}
-  DisableLineOnEnter: 0
 --- !u!114 &7133323252474396062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,13 +274,10 @@ MonoBehaviour:
   scaleMode: 0
   color: {r: 1, g: 1, b: 1, a: 1}
   detailLevel: 2
-  culling: 0
-  boundsPadding: 0
   renderQueue: -1
   zTest: 4
   zOffsetFactor: 0
   zOffsetUnits: 0
-  colorMask: 15
   stencilComp: 8
   stencilOpPass: 0
   stencilRefID: 0

@@ -173,13 +173,10 @@ MonoBehaviour:
   scaleMode: 0
   color: {r: 1, g: 1, b: 1, a: 1}
   detailLevel: 2
-  culling: 0
-  boundsPadding: 0
   renderQueue: -1
   zTest: 4
   zOffsetFactor: 0
   zOffsetUnits: 0
-  colorMask: 15
   stencilComp: 8
   stencilOpPass: 0
   stencilRefID: 0
@@ -761,7 +758,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_WalkableAreaGuide
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 204837564142184685, guid: ab4ee90661de8fe4d8c0f7c2a97d55d1, type: 3}
     m_AddedGameObjects: []
