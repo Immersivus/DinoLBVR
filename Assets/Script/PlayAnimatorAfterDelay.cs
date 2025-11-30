@@ -1,25 +1,24 @@
 using UnityEngine;
-using System.Collections;
 
-public class PortalDelayedAnimation : MonoBehaviour
+public class PlayAnimatorAfterDelay : MonoBehaviour
 {
     public Animator animator;
-    public string stateName;
+    public string triggerName;
     public float delay;
 
-    private bool started = false;
+    private bool activated = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (started) return;
+        if (activated) return;
 
-        started = true;
-        StartCoroutine(PlayAfterDelay());
+        activated = true;
+        StartCoroutine(ActivateAfterDelay());
     }
 
-    IEnumerator PlayAfterDelay()
+    private System.Collections.IEnumerator ActivateAfterDelay()
     {
         yield return new WaitForSeconds(delay);
-        animator.Play(stateName);
+        animator.SetTrigger(triggerName);
     }
 }
