@@ -1452,7 +1452,6 @@ GameObject:
   - component: {fileID: 6416334229001173583}
   - component: {fileID: 775768320353458506}
   - component: {fileID: 381528712711867090}
-  - component: {fileID: 7493407369885099264}
   - component: {fileID: 5968723124473854836}
   - component: {fileID: 4274314914609031874}
   m_Layer: 0
@@ -1561,24 +1560,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a66628e69c9bf248aa8377ecb2042b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 3
-  buoyancy: 0.25
-  wobbleAmount: 0.3
-  wobbleSpeed: 4
---- !u!114 &7493407369885099264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714591369878842654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c47776e372fd1a144a89b854b0ef5e51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  height: 0.5
+  floatAmplitude: 0.5
+  floatFrequency: 1
+  returnSpeed: 0.3
+  minVelocityForReturn: 0.15
+  returnAcceleration: 0.03
+  hitForceMultiplier: 0.4
 --- !u!114 &5968723124473854836
 MonoBehaviour:
   m_ObjectHideFlags: 0
