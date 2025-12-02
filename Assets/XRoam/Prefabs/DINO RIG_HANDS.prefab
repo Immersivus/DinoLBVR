@@ -12,6 +12,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: DINO RIG_HANDS
       objectReference: {fileID: 0}
+    - target: {fileID: 6544063847145245342, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingLost.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4741501983234210023}
+    - target: {fileID: 6544063847145245342, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingAcquired.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4741501983234210023}
+    - target: {fileID: 6544063847145245342, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingLost.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTrackingLost
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544063847145245342, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingAcquired.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTrackingAcquired
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914982047247470880, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingLost.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8347271261278266823}
+    - target: {fileID: 6914982047247470880, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingAcquired.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8347271261278266823}
+    - target: {fileID: 6914982047247470880, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingLost.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTrackingLost
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914982047247470880, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+      propertyPath: m_TrackingAcquired.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTrackingAcquired
+      objectReference: {fileID: 0}
     - target: {fileID: 8154251825334606161, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -57,3 +89,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+--- !u!114 &4741501983234210023 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2851561809140434555, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+  m_PrefabInstance: {fileID: 7376890373519376028}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d0344e6f9770b409ce9bbeeaaa03ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8347271261278266823 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1551644318145420123, guid: a3a006d1de4f4f04fb4889ba759db6e6, type: 3}
+  m_PrefabInstance: {fileID: 7376890373519376028}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d0344e6f9770b409ce9bbeeaaa03ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
