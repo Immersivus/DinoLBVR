@@ -705,61 +705,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Deep Ocean
   - m_Version: 1
-    m_Start: 408.76666666666506
-    m_ClipIn: 0
-    m_Asset: {fileID: 8918567931915288161}
-    m_Duration: 5.0166666666666515
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -7641996738057924466}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: BlackRoom 2
-  - m_Version: 1
-    m_Start: 413.7833333333317
+    m_Start: 408.8833333333315
     m_ClipIn: 0
     m_Asset: {fileID: 1220633792343118507}
-    m_Duration: 60
+    m_Duration: 64.9000000000002
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -825,10 +774,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Digging Site 2
   - m_Version: 1
-    m_Start: 474.11666666666497
+    m_Start: 473.7833333333317
     m_ClipIn: 0
     m_Asset: {fileID: 1820865391487249378}
-    m_Duration: 1
+    m_Duration: 1.3333333333332575
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -2853,10 +2802,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 341.6666666666665
+    m_Start: 339.53333333333336
     m_ClipIn: 0
     m_Asset: {fileID: 42468205347091894}
-    m_Duration: 4
+    m_Duration: 6.133333333333155
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6795554468510564744}
     m_EaseInDuration: 0
@@ -3015,25 +2964,3 @@ MonoBehaviour:
     _serializedGuid: 7b4c067a347efb4abb0d80dc04c4918f
     _cachedName: '[Activator] TM - HOLOGRAM ACTIVATE'
     _cachedScene: 03_Dino_ExteriorSite
---- !u!114 &8918567931915288161
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a3b258980d762a41b348d1dda651011, type: 3}
-  m_Name: StateClip(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  Color: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 0.5372549}
-  ResumeFromAdminUI: 0
-  Preset: {fileID: 11400000, guid: bc27778ebbcb8eb43a95e17c77daef67, type: 2}
-  StateId: 06ceb2f4-44fa-4d77-8775-c56f1bf4a806
-  PauseOnFinish: 1
-  AutomaticResume: 0
-  PauseDuration: 0
-  ResumeType: 0
-  JumpPreset: {fileID: 0}
-  JumpState: 
