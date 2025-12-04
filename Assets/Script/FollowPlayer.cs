@@ -15,7 +15,7 @@ public class FollowPlayer : MonoBehaviour
     {
         if(player != null)
         {
-            Vector3 newPosition = new Vector3(player.transform.position.x, 0,player.transform.position.z);
+            Vector3 newPosition = new Vector3(player.transform.position.x, 0, player.transform.position.z);
 
             transform.position = newPosition;
         }

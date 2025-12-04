@@ -7,7 +7,6 @@ namespace UnivrseSdk.Services
     {
         [Header("Configs")]
         [SerializeField] private LanguageConfig _languageConfig;
-
         private void Awake()
         {
             RegisterServices();
