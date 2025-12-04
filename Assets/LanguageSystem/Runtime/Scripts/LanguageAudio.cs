@@ -10,17 +10,19 @@ namespace Univrse.Studio.LanguageSystemV2
         [SerializeField] private LanguageAudioObject _languages;
         private ILanguageService _languageService;
 
+        [SerializeField] AudioSource ac;
         protected override void Start()
         {
             base.Start();
             _languageService = ServiceLocator.Instance.GetService<ILanguageService>();
             _languageService.OnCurrentLanguageChange += OnCurrentLanguageChange;
             _audioObject.SetAudioClip(GetClipByLanguage());
+            if (_playOnAwake) ac.Play();
         }
 
         private void OnEnable()
         {
-            if(_playOnAwake) Play();
+            
         }
 
         private void OnCurrentLanguageChange(LanguageObject languageObject)
