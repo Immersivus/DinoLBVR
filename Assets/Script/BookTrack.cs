@@ -8,6 +8,12 @@ public class BookTrack : MonoBehaviour
 
     [SerializeField] GameObject bookObject;
 
+    [SerializeField] List<AudioClip> audios;
+    [SerializeField] List<AudioClip> audiosOpen;
+
+    [SerializeField] AudioSource ac;
+    [SerializeField] AudioSource openAc;
+
     bool tracking;
     Transform playerTransform;
 
@@ -60,6 +66,9 @@ public class BookTrack : MonoBehaviour
             bookVideos[index].SetActive(true);
           
         }
+        ac.clip = audios[index];
+        openAc.clip = audiosOpen[index];
         bookObject.GetComponent<Animator>().SetTrigger("APPEAR");
+        ac.Play();
     }
 }

@@ -4081,6 +4081,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1748414688636757769}
   - component: {fileID: 3450186072790238330}
+  - component: {fileID: 2966753549127601765}
   m_Layer: 0
   m_Name: TM_Decrease_FarClip
   m_TagString: Untagged
@@ -4122,6 +4123,34 @@ PlayableDirector:
     value: {fileID: 7139524705585242738}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &2966753549127601765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3914888583343857241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f4fce3f0ceac64db97ad287a0dcde7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _signalName: DecreaseFarClip
+  _onSignalReceived:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3450186072790238330}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3982774195152787880
 GameObject:
   m_ObjectHideFlags: 0
@@ -7802,6 +7831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6551331449195781955}
   - component: {fileID: 5533958948481438545}
+  - component: {fileID: 3449355556109234217}
   m_Layer: 0
   m_Name: TM_Increase_FarClip
   m_TagString: Untagged
@@ -7843,6 +7873,34 @@ PlayableDirector:
     value: {fileID: 7139524705585242738}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &3449355556109234217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6028824974181279210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f4fce3f0ceac64db97ad287a0dcde7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _signalName: IncreaseFarClip
+  _onSignalReceived:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5533958948481438545}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6042444522688706730
 GameObject:
   m_ObjectHideFlags: 0
