@@ -48,7 +48,7 @@ public class BookTrack : MonoBehaviour
     {
         while (true)
         {
-            Quaternion stabilizedRotation = new Quaternion(transform.rotation.x, playerTransform.rotation.y, playerTransform.rotation.z, playerTransform.rotation.w);
+            Quaternion stabilizedRotation = new Quaternion(transform.rotation.x, playerTransform.rotation.y, transform.rotation.z, playerTransform.rotation.w);
             transform.rotation = Quaternion.Lerp(transform.rotation, stabilizedRotation, Time.deltaTime);
             yield return null;
         }
