@@ -21,40 +21,43 @@ public class InteractableObject : MonoBehaviour
             iconGroup.alpha = 0f;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (playerHead == null)
+        /*if (playerHead == null)
         {
             if (Camera.main != null)
                 playerHead = Camera.main.transform;
             else
-                return; // just skip this frame, no errors
+                return;
         }
 
-        // Cast a ray forward from the VR camera
-        Ray ray = new Ray(playerHead.position, playerHead.forward);
-        if (Physics.SphereCast(ray, gazeRadius, out RaycastHit hit, maxDistance))
+        // Get everything inside the gaze radius around the camera
+        Collider[] hits = Physics.OverlapSphere(playerHead.position, gazeRadius);
+
+        bool isHit = false;
+
+        // Check if THIS object was inside the sphere
+        foreach (var col in hits)
         {
-            // Check if THIS object was hit
-            shouldShow = hit.collider.gameObject == gameObject;
+            if (col.gameObject == gameObject)
+            {
+                isHit = true;
+                break;
+            }
         }
-        else
-        {
-            shouldShow = false;
-        }
+
+        shouldShow = isHit;
 
         // Smooth fade
         float targetAlpha = shouldShow ? 1f : 0f;
         iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, targetAlpha, Time.deltaTime * fadeSpeed);
 
+        // Billboard look-at (Y axis only)
         Vector3 lookDir = playerHead.position - transform.position;
-
-        // Zero out vertical component so it only rotates around Y
         lookDir.y = 0f;
 
-        // If the player is directly above/below, ignore to avoid NaN
         if (lookDir.sqrMagnitude > 0.001f)
-            iconGroup.transform.rotation = Quaternion.LookRotation(lookDir);
+            iconGroup.transform.rotation = Quaternion.LookRotation(lookDir);*/
     }
 
     public void PlayAnimation()

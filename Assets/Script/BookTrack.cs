@@ -1,3 +1,4 @@
+using RenderHeads.Media.AVProVideo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,6 +64,7 @@ public class BookTrack : MonoBehaviour
                 book.SetActive(false);
             }
 
+            bookVideos[index].GetComponent<MediaPlayer>().OpenMedia();
             bookVideos[index].SetActive(true);
           
         }

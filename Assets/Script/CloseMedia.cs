@@ -12,4 +12,12 @@ public class CloseMedia : MonoBehaviour
             player.CloseMedia();
         }
     }
+
+    public void OpenBookMedia()
+    {
+        foreach (var player in players)
+        {
+            player.OpenMedia();
+        }
+    }
 }
