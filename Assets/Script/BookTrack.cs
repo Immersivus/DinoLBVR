@@ -40,7 +40,7 @@ public class BookTrack : MonoBehaviour
                 tracking = true;
             }
 
-            Vector3 newPosition = new Vector3(playerTransform.position.x, transform.position.y, playerTransform.position.z);
+            Vector3 newPosition = new Vector3(playerTransform.position.x, playerTransform.position.y, playerTransform.position.z);
             transform.position = newPosition;
         }
     }
