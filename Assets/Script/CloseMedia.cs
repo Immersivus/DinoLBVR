@@ -20,4 +20,10 @@ public class CloseMedia : MonoBehaviour
             player.OpenMedia();
         }
     }
+
+
+    public void DisableObject() 
+    {
+        gameObject.SetActive(false);
+    }
 }

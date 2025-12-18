@@ -1304,6 +1304,7 @@ Transform:
   - {fileID: 8260452165906073006}
   - {fileID: 4930055219571422997}
   - {fileID: 6962729119350094302}
+  - {fileID: 3256109998940002641}
   m_Father: {fileID: 8154251825334606161}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1388720004958966341
@@ -4004,6 +4005,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bodyPartType: 5
+--- !u!1 &3817137557397866988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3256109998940002641}
+  - component: {fileID: 2413307749972703414}
+  m_Layer: 27
+  m_Name: '[Activator] Hand Visualizer Underwater'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3256109998940002641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3817137557397866988}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7401852833044829659}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2413307749972703414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3817137557397866988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9813c68d7d6f44282ace8bd2d1fd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UseOptimizedControls: 0
+  m_LeftHandMesh: {fileID: 619516976443357885}
+  m_RightHandMesh: {fileID: 4490032610384925459}
+  m_HandMeshMaterial: {fileID: 2100000, guid: eca533637329d9e49bae65f63617e349, type: 2}
+  m_DrawMeshes: 1
+  m_DebugDrawPrefab: {fileID: 6507399986997092475, guid: 254b742d65a15d14b9df756ae77de868, type: 3}
+  m_DebugDrawJoints: 0
+  m_VelocityPrefab: {fileID: 8538602047018081646, guid: 629fd7882ec6bfc499a5fcf20035282b, type: 3}
+  m_VelocityType: 2
 --- !u!1 &3869125264791818158
 GameObject:
   m_ObjectHideFlags: 0
@@ -5940,6 +5994,8 @@ GameObject:
   - component: {fileID: 8210713480540962306}
   - component: {fileID: 2560542808087553555}
   - component: {fileID: 7139524705585242738}
+  - component: {fileID: 6983048158596396996}
+  - component: {fileID: 7069418108597800866}
   m_Layer: 27
   m_Name: DINO RIG_HANDS_v02
   m_TagString: Player
@@ -6129,6 +6185,62 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6983048158596396996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875069071626153115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5f97d060060b141a581102ffc261c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activationType: 1
+  _elements:
+  - {fileID: 5162047181331533731}
+  _progressiveActivation: 0
+  _preset: {fileID: 11400000, guid: bc27778ebbcb8eb43a95e17c77daef67, type: 2}
+  _statesIds:
+  - fd776781-ae02-43ee-bbc1-ee8542fe2d74
+  - 07f5c939-a653-4eb1-98c3-e7d875a4fbb9
+  - 4a71895e-0862-4fcf-8e42-d96b7ed638d3
+  - 1f67e93c-626f-4d70-90e6-24b1cf0bc914
+  - b19c1e22-a7b0-4fff-9e92-54bf4b9283d9
+  - c9028d63-eea4-4568-b051-cc79d2f61037
+  - 60087b3d-a839-46d5-9772-8808adbf00fd
+  - 4b8a7802-f96c-433c-869b-3004cccc23a8
+  - e6864789-efb3-4cbb-91f3-23a9a8a85ead
+  - 1b1d4807-07b9-4fca-97ec-a173665ce37c
+  - 5d6ba51b-c2d4-4c1c-8634-eb5192cb2d98
+  - c4d26762-787a-4e73-9586-8310b3464633
+  - 44e0fb2d-1d36-44cb-a462-370437cdd4ee
+  - 8079b322-4dd8-406e-8589-1c4756903725
+  - 098244aa-1129-42f0-844d-3f4a8519d5c8
+  - 309f74c7-bc44-4413-a452-7cc8225dd676
+  _disableOnStateChanged: 1
+--- !u!114 &7069418108597800866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875069071626153115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5f97d060060b141a581102ffc261c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activationType: 1
+  _elements:
+  - {fileID: 3817137557397866988}
+  _progressiveActivation: 0
+  _preset: {fileID: 11400000, guid: bc27778ebbcb8eb43a95e17c77daef67, type: 2}
+  _statesIds:
+  - a3970cb3-9ed9-4a9e-a8e5-7f31295968a8
+  - bc1fdbfd-54ae-4f23-a892-05cbf0f530bb
+  _disableOnStateChanged: 1
 --- !u!1 &5131744395659982179
 GameObject:
   m_ObjectHideFlags: 0
@@ -6172,7 +6284,7 @@ GameObject:
   - component: {fileID: 6962729119350094302}
   - component: {fileID: 4645193505652128213}
   m_Layer: 27
-  m_Name: Hand Visualizer
+  m_Name: '[Activator] Hand Visualizer Jungle'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6208,7 +6320,7 @@ MonoBehaviour:
   m_UseOptimizedControls: 0
   m_LeftHandMesh: {fileID: 619516976443357885}
   m_RightHandMesh: {fileID: 4490032610384925459}
-  m_HandMeshMaterial: {fileID: 0}
+  m_HandMeshMaterial: {fileID: 2100000, guid: d71ea623c00edd644a97cb56ce74e09d, type: 2}
   m_DrawMeshes: 1
   m_DebugDrawPrefab: {fileID: 6507399986997092475, guid: 254b742d65a15d14b9df756ae77de868, type: 3}
   m_DebugDrawJoints: 0
