@@ -5940,7 +5940,7 @@ GameObject:
   - component: {fileID: 8210713480540962306}
   - component: {fileID: 2560542808087553555}
   - component: {fileID: 7139524705585242738}
-  - component: {fileID: 530777635072038457}
+  - component: {fileID: 1306004331370725054}
   m_Layer: 27
   m_Name: DINO RIG_HANDS_v02
   m_TagString: Player
@@ -6130,7 +6130,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &530777635072038457
+--- !u!114 &1306004331370725054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6139,9 +6139,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 4875069071626153115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62f4f225c826afa4d8a176cb61cb7cfe, type: 3}
+  m_Script: {fileID: 11500000, guid: b7f4fce3f0ceac64db97ad287a0dcde7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _signalName: SwapHands
+  _onSignalReceived:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4645193505652128213}
+        m_TargetAssemblyTypeName: UnityEngine.XR.Hands.Samples.VisualizerSample.HandVisualizer,
+          XRoam.SDK
+        m_MethodName: ChangeHandMaterials
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5131744395659982179
 GameObject:
   m_ObjectHideFlags: 0

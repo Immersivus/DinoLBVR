@@ -22,7 +22,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 1.5976266006473452
+    m_Start: 5.216666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 1600290448771164661}
     m_Duration: 4.016666666666667
@@ -88,7 +88,7 @@ MonoBehaviour:
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 1.5976266006473452
+    m_PreExtrapolationTime: 5.216666666666667
     m_DisplayName: BookFinal
   m_Markers:
     m_Objects: []
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 2302441737366764887, guid: 58a124a266925a24492984f9e3c23c1d, type: 3}
+  m_Clip: {fileID: 7400000, guid: 86f6a5af9d876eb4480e3cf3ec13f287, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 0
+    m_Start: 5.216666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -3364879447150858334}
     m_Duration: 10.833333333333334
@@ -228,11 +228,29 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -1463423111104816832}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: 3.1833333333333265
+    m_BlendInDuration: 3.2833333333333297
+    m_BlendOutDuration: 3.183333333333337
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -271,7 +289,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: metarigAction
   - m_Version: 1
-    m_Start: 7.6500000000000075
+    m_Start: 12.866666666666664
     m_ClipIn: 0
     m_Asset: {fileID: 8478311736822457412}
     m_Duration: 10.833333333333334
@@ -279,8 +297,8 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -1463423111104816832}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 3.1833333333333265
-    m_BlendOutDuration: 1.0166666666666337
+    m_BlendInDuration: 3.183333333333337
+    m_BlendOutDuration: 1.0166666666666586
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -340,7 +358,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: metarigAction
   - m_Version: 1
-    m_Start: 17.466666666666708
+    m_Start: 22.683333333333337
     m_ClipIn: 0
     m_Asset: {fileID: -5754453478784001041}
     m_Duration: 12.116666666666667
@@ -348,29 +366,11 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -1463423111104816832}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.0166666666666337
+    m_BlendInDuration: 1.0166666666666586
     m_BlendOutDuration: 0
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -391,7 +391,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: olhar_idle
   - m_Version: 1
-    m_Start: 29.58333333333324
+    m_Start: 34.79999999999987
     m_ClipIn: 0
     m_Asset: {fileID: 2764346930676549930}
     m_Duration: 12.116666666666667
@@ -424,42 +424,9 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: olhar_idle
   - m_Version: 1
-    m_Start: 41.699999999999896
+    m_Start: 46.91666666666653
     m_ClipIn: 0
     m_Asset: {fileID: -7225572610033092104}
-    m_Duration: 12.116666666666667
-    m_TimeScale: 0.8000000000000002
-    m_ParentTrack: {fileID: -1463423111104816832}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 1
-    m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: olhar_idle
-  - m_Version: 1
-    m_Start: 53.816666666666556
-    m_ClipIn: 0
-    m_Asset: {fileID: -3417324903204118702}
     m_Duration: 12.116666666666667
     m_TimeScale: 0.8000000000000002
     m_ParentTrack: {fileID: -1463423111104816832}
@@ -490,7 +457,40 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: olhar_idle
   - m_Version: 1
-    m_Start: 65.93333333333322
+    m_Start: 59.033333333333196
+    m_ClipIn: 0
+    m_Asset: {fileID: -3417324903204118702}
+    m_Duration: 12.116666666666667
+    m_TimeScale: 0.8000000000000002
+    m_ParentTrack: {fileID: -1463423111104816832}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: olhar_idle
+  - m_Version: 1
+    m_Start: 71.14999999999993
     m_ClipIn: 0
     m_Asset: {fileID: 6079577365356796807}
     m_Duration: 12.116666666666667
@@ -523,7 +523,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: olhar_idle
   - m_Version: 1
-    m_Start: 78.0499999999999
+    m_Start: 83.26666666666661
     m_ClipIn: 0
     m_Asset: {fileID: 4832194788175610853}
     m_Duration: 12.116666666666667
@@ -553,6 +553,57 @@ MonoBehaviour:
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: olhar_idle
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 4.186666666666667
+    m_Asset: {fileID: 3076613394668097826}
+    m_Duration: 8.499999999999996
+    m_TimeScale: 0.8000000000000002
+    m_ParentTrack: {fileID: -1463423111104816832}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: 3.2833333333333297
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: olhar_idle
   m_Markers:
@@ -639,6 +690,28 @@ MonoBehaviour:
   m_RemoveStartOffset: 1
   m_ApplyFootIK: 1
   m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &3076613394668097826
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: AnimationPlayableAsset(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  m_Clip: {fileID: -1872886420158201490, guid: 58a124a266925a24492984f9e3c23c1d, type: 3}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 1
+  m_ApplyFootIK: 1
+  m_Loop: 1
   m_Version: 1
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &3563285244266673144
