@@ -5,6 +5,8 @@ using UnityEngine;
 public class CloseMedia : MonoBehaviour
 {
     [SerializeField] List<MediaPlayer> players;
+
+    [SerializeField] GameObject itself;
     public void CloseBookMedia()
     {
         foreach(var player in players)
@@ -24,6 +26,6 @@ public class CloseMedia : MonoBehaviour
 
     public void DisableObject() 
     {
-        gameObject.SetActive(false);
+        itself.SetActive(false);
     }
 }

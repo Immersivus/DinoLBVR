@@ -57,7 +57,7 @@ public class BookTrack : MonoBehaviour
 
     public void ActivateBook(int index)
     {
-        bookObject.gameObject.SetActive(true);
+        bookObject.SetActive(true);
         if (!bookVideos[index].activeSelf)
         {
             foreach (var book in bookVideos)
