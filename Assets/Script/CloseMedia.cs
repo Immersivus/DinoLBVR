@@ -9,7 +9,7 @@ public class CloseMedia : MonoBehaviour
     [SerializeField] GameObject itself;
     public void CloseBookMedia()
     {
-        foreach(var player in players)
+        foreach (var player in players)
         {
             player.CloseMedia();
         }
@@ -23,8 +23,11 @@ public class CloseMedia : MonoBehaviour
         }
     }
 
-
-    public void DisableObject() 
+    public void OpenByItself()
+    {
+        itself.GetComponent<Animator>().SetBool("OPEN", true);
+    }
+    public void DisableObject()
     {
         itself.SetActive(false);
     }
