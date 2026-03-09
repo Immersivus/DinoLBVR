@@ -1,3 +1,4 @@
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 
@@ -12,7 +13,7 @@ public class InteractableObject : MonoBehaviour
 
     Transform playerHead;
     bool shouldShow = false;
-
+    public bool dino;
     [SerializeField] Animator anim;
 
     void Start()
@@ -30,28 +31,38 @@ public class InteractableObject : MonoBehaviour
             else
                 return; // just skip this frame, no errors
         }
+        if (!dino)
+        {         
 
-        // Cast a ray forward from the VR camera
-        Ray ray = new Ray(playerHead.position, playerHead.forward);
-        if (Physics.SphereCast(ray, gazeRadius, out RaycastHit hit, maxDistance))
-        {
-            // Check if THIS object was hit
-            shouldShow = hit.collider.gameObject == gameObject;
+            // Cast a ray forward from the VR camera
+            Ray ray = new Ray(playerHead.position, playerHead.forward);
+            if (Physics.SphereCast(ray, gazeRadius, out RaycastHit hit, maxDistance))
+            {
+                // Check if THIS object was hit
+                shouldShow = hit.collider.gameObject == gameObject;
+            }
+            else
+            {
+                shouldShow = false;
+            }
+
+            // Smooth fade
+            float targetAlpha = shouldShow ? 1f : 0f;
+            iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, targetAlpha, Time.deltaTime * fadeSpeed);
+
+            
         }
         else
         {
-            shouldShow = false;
+            if (iconGroup.gameObject.activeSelf)
+            {
+                iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, 1, Time.deltaTime * fadeSpeed);
+            }
         }
-
-        // Smooth fade
-        float targetAlpha = shouldShow ? 1f : 0f;
-        iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, targetAlpha, Time.deltaTime * fadeSpeed);
-
         Vector3 lookDir = playerHead.position - transform.position;
 
         // Zero out vertical component so it only rotates around Y
         lookDir.y = 0f;
-
         // If the player is directly above/below, ignore to avoid NaN
         if (lookDir.sqrMagnitude > 0.001f)
             iconGroup.transform.rotation = Quaternion.LookRotation(lookDir);
