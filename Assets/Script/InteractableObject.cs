@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using XRoam.Experience.Colliders;
 
 
 [RequireComponent(typeof(Collider))]
@@ -19,7 +20,7 @@ public class InteractableObject : MonoBehaviour
     void Start()
     {
         if (iconGroup != null)
-            iconGroup.alpha = 0f;
+            iconGroup.alpha = 0f;        
     }
 
     void FixedUpdate()
@@ -32,7 +33,7 @@ public class InteractableObject : MonoBehaviour
                 return; // just skip this frame, no errors
         }
         if (!dino)
-        {         
+        {
 
             // Cast a ray forward from the VR camera
             Ray ray = new Ray(playerHead.position, playerHead.forward);
@@ -48,9 +49,11 @@ public class InteractableObject : MonoBehaviour
 
             // Smooth fade
             float targetAlpha = shouldShow ? 1f : 0f;
-            iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, targetAlpha, Time.deltaTime * fadeSpeed);
+            if (iconGroup.gameObject.activeSelf)
+            {
+                iconGroup.alpha = Mathf.Lerp(iconGroup.alpha, targetAlpha, Time.deltaTime * fadeSpeed);
+            }
 
-            
         }
         else
         {
@@ -64,8 +67,19 @@ public class InteractableObject : MonoBehaviour
         // Zero out vertical component so it only rotates around Y
         lookDir.y = 0f;
         // If the player is directly above/below, ignore to avoid NaN
-        if (lookDir.sqrMagnitude > 0.001f)
+        if (lookDir.sqrMagnitude > 0.001f && iconGroup.gameObject.activeSelf)
             iconGroup.transform.rotation = Quaternion.LookRotation(lookDir);
+
+
+        if (shouldShow && Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Log1");
+            if(TryGetComponent<ColliderController>(out ColliderController clController))
+            {
+                Debug.Log("Log2");
+                clController.OnEnterActions?.Invoke(transform);
+            }
+        }
     }
     public void PlayAnimation()
     {
