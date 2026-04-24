@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -40,9 +40,8 @@ public class SplineMovement : MonoBehaviour
         if (currentStopIndex >= stops.Count) return;
 
         Vector3 knotPos = GetKnotPosition(stops[currentStopIndex].knotIndex);
-
+      
         float distance = Vector3.Distance(transform.position, knotPos);
-
         if (distance < 0.1f)
         {
             StartCoroutine(Wait(stops[currentStopIndex].waitTime));
@@ -59,7 +58,11 @@ public class SplineMovement : MonoBehaviour
 
     Vector3 GetKnotPosition(int index)
     {
-        return splineContainer.Spline[index].Position;
+        Vector3 localPos = splineContainer.Spline[index].Position;
+        Vector3 worldPos = splineContainer.transform.TransformPoint(localPos);
+        return worldPos;
+
+       
     }
 }
 

@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 8210713480540962306}
   - component: {fileID: 2560542808087553555}
   - component: {fileID: 7139524705585242738}
-  - component: {fileID: 5521790476348112270}
+  - component: {fileID: 5315772367845567375}
   m_Layer: 27
   m_Name: RIG_FIXED_RAIL
   m_TagString: Player
@@ -333,7 +333,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5521790476348112270
+--- !u!114 &5315772367845567375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -349,9 +349,15 @@ MonoBehaviour:
   speed: 0.7
   stops:
   - knotIndex: 0
-    waitTime: 5
+    waitTime: 3
   - knotIndex: 1
-    waitTime: 2
+    waitTime: 5
+  - knotIndex: 2
+    waitTime: 5
+  - knotIndex: 3
+    waitTime: 10
+  - knotIndex: 3
+    waitTime: 7
 --- !u!1 &6028824974181279210
 GameObject:
   m_ObjectHideFlags: 0
