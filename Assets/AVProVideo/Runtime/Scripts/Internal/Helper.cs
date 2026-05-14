@@ -3,21 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2024 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo
 {
 	public static class Helper
 	{
-		public const string AVProVideoVersion = "3.3.3";
+		public const string AVProVideoVersion = "3.0.3";
 		public sealed class ExpectedPluginVersion
 		{
-			public const string Windows      = "3.2.6";
-			public const string WinRT        = "3.2.6";
-			public const string Android      = "3.3.3";
-			public const string Apple        = "3.3.0";
-			public const string OpenHarmony  = "3.3.2";
+			public const string Windows      = "3.0.0";
+			public const string WinRT        = "3.0.0";
+			public const string Android      = "3.0.3";
+			public const string Apple        = "3.0.3";
 		}
 
 		public const string UnityBaseTextureName = "_MainTex";
@@ -49,11 +48,6 @@ namespace RenderHeads.Media.AVProVideo
 					break;
 				case MediaPathType.RelativeToStreamingAssetsFolder:
 					result = Application.streamingAssetsPath;
-#if UNITY_OPENHARMONY && !UNITY_EDITOR
-					// It has been seen that some versions of Tuanjie do not include the 'jar:' prefix on the streamingAssetsPath so add it in here if it is missing
-					string jarUrlPrefix = "jar:";
-					result = result.StartsWith( jarUrlPrefix ) ? result : ( jarUrlPrefix + result );
-#endif
 					break;
 			}
 			return result;
@@ -174,7 +168,6 @@ namespace RenderHeads.Media.AVProVideo
 				GetPlatformName(Platform.Android),
 				GetPlatformName(Platform.WindowsUWP),
 				GetPlatformName(Platform.WebGL),
-				GetPlatformName(Platform.OpenHarmony)
 			};
 		}
 
@@ -373,11 +366,7 @@ namespace RenderHeads.Media.AVProVideo
 			frame = Mathf.Max(0, frame);
 			frameRate = Mathf.Max(0f, frameRate);
 			double frameDurationSeconds = 1.0 / frameRate;
-#if !UNITY_EDITOR && UNITY_ANDROID
-			return ((double)frame * frameDurationSeconds) + (frameDurationSeconds * 0.01);		// #1999 : Need to bump on the value a little, but not a whole half frame time, to avoid float inaccuracy error
-#else
-			return ((double)frame * frameDurationSeconds) + (frameDurationSeconds * 0.5);       // Add half a frame we that the time lands in the middle of the frame range and not at the edges
-#endif
+			return ((double)frame * frameDurationSeconds) + (frameDurationSeconds * 0.5);		// Add half a frame we that the time lands in the middle of the frame range and not at the edges
 		}
 
 		public static double FindNextKeyFrameTimeSeconds(double seconds, float frameRate, int keyFrameInterval)

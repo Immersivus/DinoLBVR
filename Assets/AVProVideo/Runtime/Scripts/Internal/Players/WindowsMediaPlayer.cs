@@ -11,12 +11,11 @@
 	#define AVPROVIDEO_FIX_UPDATEEXTERNALTEXTURE_LEAK
 #endif
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System;
+using System.Text;
 
 #if NETFX_CORE
 using Windows.Storage.Streams;
@@ -28,101 +27,57 @@ using Windows.Storage.Streams;
 
 namespace RenderHeads.Media.AVProVideo
 {
-	public class AuthData
-	{
-		public string URL { get; set; }
-		public string Token { get; set; }
-		public byte[] KeyBytes { get; set; }
-
-		public AuthData()
-		{
-			Clear();
-		}
-
-		public void Clear()
-		{
-			URL = string.Empty;
-			Token = string.Empty;
-			KeyBytes = null;
-		}
-
-		public string KeyBase64
-		{
-			get
-			{
-				if (KeyBytes != null)
-				{
-					return System.Convert.ToBase64String(KeyBytes);
-				}
-				else
-				{
-					return string.Empty;
-				}
-			}
-			set
-			{
-				if (value != null)
-				{
-					KeyBytes = System.Convert.FromBase64String(value);
-				}
-				else
-				{
-					KeyBytes = null;
-				}
-			}
-		}
-	};
-
 	/// <summary>
 	/// Windows desktop and UWP implementation of BaseMediaPlayer
 	/// </summary>
 	public /*sealed*/ partial class WindowsMediaPlayer : BaseMediaPlayer
 	{
-		private Windows.AudioOutput _audioOutput						= Windows.AudioOutput.System;
-		private string				_audioDeviceOutputName				= string.Empty;
-		private List<string>		_preferredFilters					= new List<string>();
-		private Audio360ChannelMode _audio360ChannelMode				= Audio360ChannelMode.TBE_8_2;
-		private bool				_useCustomMovParser					= false;
-		private bool				_useStereoDetection					= true;
-		private bool				_useHapNotchLC						= true;
-		private bool				_useTextTrackSupport				= true;
-		private bool				_useFacebookAudio360Support			= true;
-		private bool				_useAudioDelay						= false;
-		private int 				_decoderParallelFrameCount			= 3;
-		private int					_decodePrerollFrameCount			= 5;
-		private bool				_isPlaying							= false;
-		private bool				_isPaused							= false;
-		private bool				_isLooping							= false;
-		private bool				_canPlay							= false;
-		private bool				_hasMetaData						= false;
-		private int					_width								= 0;
-		private int					_height								= 0;
-		private float				_frameRate							= 0f;
-		private float				_playBackRate						= 1.0f;
-		private bool				_audioMuted							= false;
-		private float				_volume								= 1.0f;
-		private float				_balance							= 0.0f;
-		private bool				_hasAudio							= false;
-		private bool				_hasVideo							= false;
-		private bool				_isTextureTopDown					= true;
-		private System.IntPtr 		_nativeTexture						= System.IntPtr.Zero;
-		private Texture2D			_texture;
-		private RenderTexture 		_resolvedTexture;
-		private System.IntPtr 		_instance							= System.IntPtr.Zero;
-		private Windows.VideoApi	_videoApi							= Windows.VideoApi.MediaFoundation;
-		private bool				_useHardwareDecoding				= true;
-		private bool				_useRendererSync					= true;
-		private bool				_useTextureMips						= false;
-		private bool				_use10BitTextures					= false;
-		private bool				_hintAlphaChannel					= false;
-		private bool				_useLowLatency						= false;
-		private bool				_supportsLinearColorSpace			= true;
+		private Windows.AudioOutput _audioOutput = Windows.AudioOutput.System;
+		private string			_audioDeviceOutputName = string.Empty;
+		private List<string>	_preferredFilters = new List<string>();
+		private Audio360ChannelMode _audio360ChannelMode = Audio360ChannelMode.TBE_8_2;
+		private bool			_useCustomMovParser = false;
+		private bool			_useStereoDetection = true;
+		private bool			_useHapNotchLC = true;
+		private bool			_useTextTrackSupport = true;
+		private bool			_useFacebookAudio360Support = true;
+		private bool			_useAudioDelay = false;
+		private int 			_decoderParallelFrameCount = 3;
+		private int				_decodePrerollFrameCount = 5;
+
+		private bool			_isPlaying = false;
+		private bool			_isPaused = false;
+		private bool			_audioMuted = false;
+		private float			_volume = 1.0f;
+		private float			_balance = 0.0f;
+		private bool			_isLooping = false;
+		private bool			_canPlay = false;
+		private bool			_hasMetaData = false;
+		private int				_width = 0;
+		private int				_height = 0;
+		private float			_frameRate = 0f;
+		private bool			_hasAudio = false;
+		private bool			_hasVideo = false;
+		private bool			_isTextureTopDown = true;
+		private System.IntPtr 	_nativeTexture = System.IntPtr.Zero;
+		private Texture2D		_texture;
+		private RenderTexture 	_resolvedTexture;
+		private System.IntPtr 	_instance = System.IntPtr.Zero;
+		private Windows.VideoApi	_videoApi = Windows.VideoApi.MediaFoundation;
+		private bool			_useHardwareDecoding = true;
+		private bool			_useTextureMips = false;
+		private bool			_use10BitTextures = false;
+		private bool			_hintAlphaChannel = false;
+		private bool			_useLowLatency = false;
+		private bool			_supportsLinearColorSpace = true;
+		private TextureFrame	_textureFrame;
 #if AVPROVIDEO_FIX_UPDATEEXTERNALTEXTURE_LEAK
-		private TextureFrame		_textureFrame;
-		private TextureFrame		_textureFramePrev;
+		private TextureFrame	_textureFramePrev;
 #endif
-		private static bool 		_isInitialised						= false;
-		private static string 		_version							= "Plug-in not yet initialised";
+
+		private static bool 	_isInitialised = false;
+		private static string 	_version = "Plug-in not yet initialised";
+
 		private static System.IntPtr _nativeFunction_UnityRenderEvent;
 
 #if AVPROVIDEO_FIXREGRESSION_TEXTUREQUALITY_UNITY542
@@ -198,80 +153,39 @@ namespace RenderHeads.Media.AVProVideo
 
 		public WindowsMediaPlayer(MediaPlayer.OptionsWindows options) : base()
 		{
-			SetOptions(options);
+			SetOptions(options.videoApi, options._audioMode, options.useHardwareDecoding, options.useTextureMips, options.use10BitTextures, options.hintAlphaChannel, options.useLowLatency, options.forceAudioOutputDeviceName, options.preferredFilters, options.useCustomMovParser, options.parallelFrameCount, options.prerollFrameCount, options.useHapNotchLC, options.useStereoDetection, options.useTextTrackSupport, options.useFacebookAudio360Support, options.bufferedFrameSelection, options.pauseOnPrerollComplete, options.useAudioDelay);
 		}
 
 		public WindowsMediaPlayer(MediaPlayer.OptionsWindowsUWP options) : base()
 		{
 			Windows.VideoApi api = (options.videoApi == WindowsUWP.VideoApi.MediaFoundation)?Windows.VideoApi.MediaFoundation:Windows.VideoApi.WinRT;
-			Windows.AudioOutput audioOutput = (Windows.AudioOutput)(int)options._audioMode;
-			SetOptions(
-				api,
-				audioOutput,
-				options.useHardwareDecoding,
-				options.useRendererSync,
-				options.useTextureMips,
-				options.use10BitTextures,
-				false,
-				options.useLowLatency,
-				string.Empty,
-				null,
-				false,
-				1,
-				0,
-				false,
-				true,
-				false,
-				true,
-				false
-			);
+			Windows.AudioOutput audioOutput = (Windows.AudioOutput)(int)options.audioOutput;
+			SetOptions(api, audioOutput, options.useHardwareDecoding, options.useTextureMips, options.use10BitTextures, false, options.useLowLatency, string.Empty, null, false, 1, 0, false, true, false, true, BufferedFrameSelectionMode.None, false, false);
 		}
 
-		public void SetOptions(MediaPlayer.OptionsWindows options)
+		public void SetOptions(Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool useTextureMips, bool use10BitTextures, bool hintAlphaChannel, 
+								bool useLowLatency, string audioDeviceOutputName, List<string> preferredFilters, bool useCustomMovParser, int parallelFrameCount, int prerollFrameCount, 
+								bool useHapNotchLC, bool useStereoDetection, bool useTextTrackSupport, bool useFacebookAudio360Support,
+								BufferedFrameSelectionMode bufferedFrameSelection, bool pauseOnPrerollComplete, bool useAudioDelay)
 		{
-			SetOptions(
-				options.videoApi,
-				options._audioMode, 
-				options.useHardwareDecoding,
-				options.useRendererSync,
-				options.useTextureMips,
-				options.use10BitTextures,
-				options.hintAlphaChannel,
-				options.useLowLatency,
-				options.forceAudioOutputDeviceName,
-				options.preferredFilters,
-				options.useCustomMovParser,
-				options.parallelFrameCount,
-				options.prerollFrameCount,
-				options.useHapNotchLC,
-				options.useStereoDetection,
-				options.useTextTrackSupport,
-				options.useFacebookAudio360Support,
-				options.useAudioDelay
-			);
-		}
-
-		public void SetOptions(Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool useRendererSync, bool useTextureMips, bool use10BitTextures,
-								bool hintAlphaChannel, bool useLowLatency, string audioDeviceOutputName, List<string> preferredFilters, bool useCustomMovParser, int parallelFrameCount,
-								int prerollFrameCount, bool useHapNotchLC, bool useStereoDetection, bool useTextTrackSupport, bool useFacebookAudio360Support, bool useAudioDelay)
-		{
-			_videoApi					= videoApi;
-			_audioOutput				= audioOutput;
-			_useHardwareDecoding		= useHardwareDecoding;
-			_useRendererSync			= useRendererSync;
-			_useTextureMips				= useTextureMips;
-			_use10BitTextures			= use10BitTextures;
-			_hintAlphaChannel			= hintAlphaChannel;
-			_useLowLatency				= useLowLatency;
-			_useStereoDetection			= useStereoDetection;
-			_useTextTrackSupport		= useTextTrackSupport;
+			_videoApi = videoApi;
+			_audioOutput = audioOutput;
+			_useHardwareDecoding = useHardwareDecoding;
+			_useTextureMips = useTextureMips;
+			_use10BitTextures = use10BitTextures;
+			_hintAlphaChannel = hintAlphaChannel;
+			_useLowLatency = useLowLatency;
+			_useStereoDetection = useStereoDetection;
+			_useTextTrackSupport = useTextTrackSupport;
 			_useFacebookAudio360Support = useFacebookAudio360Support;
-			_useHapNotchLC				= useHapNotchLC;
-			_useCustomMovParser			= useCustomMovParser;
-			_decoderParallelFrameCount	= parallelFrameCount;
-			_decodePrerollFrameCount	= prerollFrameCount;
-			_useAudioDelay				= useAudioDelay;
-			_audioDeviceOutputName		= audioDeviceOutputName;
+			_frameSelectionMode = bufferedFrameSelection;
+			_pauseOnPrerollComplete = pauseOnPrerollComplete;
+			_useHapNotchLC = useHapNotchLC;
+			_useCustomMovParser = useCustomMovParser;
+			_decoderParallelFrameCount = parallelFrameCount;
+			_decodePrerollFrameCount = prerollFrameCount;
+			_useAudioDelay = useAudioDelay;
+			_audioDeviceOutputName = audioDeviceOutputName;
 			if (!string.IsNullOrEmpty(_audioDeviceOutputName))
 			{
 				_audioDeviceOutputName = _audioDeviceOutputName.Trim();
@@ -327,32 +241,12 @@ namespace RenderHeads.Media.AVProVideo
 				}
 			}
 
-			_instance = Native.BeginOpenSource(
-				_instance,
-				_videoApi,
-				_audioOutput,
-				_useHardwareDecoding,
-				_useRendererSync,
-				UseNativeMips(),
-				(mediaHints.transparency == TransparencyMode.Transparent),
-				_useLowLatency,
-				_use10BitTextures,
-				_audioDeviceOutputName,
-				((_audioOutput == Windows.AudioOutput.Unity) ? Helper.GetUnityAudioSampleRate() : 0),
-				filters,
-				filterCount,
-				(int)_audio360ChannelMode,
-				httpHeader,
-				startWithHighestBitrate
-			);
-
+			_instance = Native.BeginOpenSource(_instance, _videoApi, _audioOutput, _useHardwareDecoding, UseNativeMips(), mediaHints.transparency == TransparencyMode.Transparent, _useLowLatency, _use10BitTextures, _audioDeviceOutputName, _audioOutput == Windows.AudioOutput.Unity?Helper.GetUnityAudioSampleRate():0, filters, filterCount, (int)_audio360ChannelMode);
 			if (_instance != System.IntPtr.Zero)
 			{
-				// Force setting any auth data as it wouldn't have been set without a _instance
-				AuthenticationData = _nextAuthData;
-
 				Native.SetCustomMovParserEnabled(_instance, _useCustomMovParser);
 				Native.SetHapNotchLCEnabled(_instance, _useHapNotchLC);
+				Native.SetFrameBufferingEnabled(_instance, (_frameSelectionMode != BufferedFrameSelectionMode.None), _pauseOnPrerollComplete);
 				Native.SetStereoDetectEnabled(_instance, _useStereoDetection);
 				Native.SetTextTrackSupportEnabled(_instance, _useTextTrackSupport);
 				Native.SetAudioDelayEnabled(_instance, _useAudioDelay, true, 0.0);
@@ -363,10 +257,7 @@ namespace RenderHeads.Media.AVProVideo
 				// RJT NOTE: Other platforms create their native instances earlier than 'OpenMedia()' and set looping at that
 				// point which Windows misses, so make sure once we have an instance we pass the looping flag down retrospectively
 				// - https://github.com/RenderHeads/UnityPlugin-AVProVideo/issues/1852
-				// - Same now with volume: https://github.com/RenderHeads/UnityPlugin-AVProVideo/issues/1916
 				Native.SetLooping(_instance, _isLooping);
-				Native.SetPlaybackRate(_instance, _playBackRate);
-				Native.SetVolume(_instance, _volume);
 			}
 
 			if (filters != null)
@@ -390,8 +281,7 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override bool OpenMediaFromBuffer(byte[] buffer)
 		{
-			// RJT NOTE: Commented out as already called by 'InternalOpenMedia()' which calls this function
-//			CloseMedia();
+			CloseMedia();
 
 			IntPtr[] filters;
 			if (_preferredFilters.Count == 0)
@@ -408,23 +298,7 @@ namespace RenderHeads.Media.AVProVideo
 				}
 			}
 
-			_instance = Native.OpenSourceFromBuffer(
-				_instance,
-				buffer,
-				(ulong)buffer.Length,
-				_videoApi,
-				_audioOutput,
-				_useHardwareDecoding,
-				_useRendererSync,
-				UseNativeMips(),
-				(_mediaHints.transparency == TransparencyMode.Transparent),
-				_useLowLatency,
-				_use10BitTextures,
-				_audioDeviceOutputName,
-				((_audioOutput == Windows.AudioOutput.Unity) ? Helper.GetUnityAudioSampleRate() : 0 ),
-				filters,
-				(uint)_preferredFilters.Count
-			);
+			_instance = Native.OpenSourceFromBuffer(_instance, buffer, (ulong)buffer.Length, _videoApi, _audioOutput, _useHardwareDecoding, UseNativeMips(), _mediaHints.transparency == TransparencyMode.Transparent, _useLowLatency, _use10BitTextures, _audioDeviceOutputName, _audioOutput == Windows.AudioOutput.Unity?Helper.GetUnityAudioSampleRate():0, filters, (uint)_preferredFilters.Count);
 
 			if (filters != null)
 			{
@@ -473,20 +347,7 @@ namespace RenderHeads.Media.AVProVideo
 				}
 			}
 
-			_instance = Native.EndOpenSourceFromBuffer(
-				_instance,
-				_audioOutput,
-				_useHardwareDecoding,
-				_useRendererSync,
-				UseNativeMips(),
-				_hintAlphaChannel,
-				_useLowLatency,
-				_use10BitTextures,
-				_audioDeviceOutputName,
-				((_audioOutput == Windows.AudioOutput.Unity) ? Helper.GetUnityAudioSampleRate() : 0),
-				filters,
-				(uint)_preferredFilters.Count
-			);
+			_instance = Native.EndOpenSourceFromBuffer(_instance, _audioOutput, _useHardwareDecoding, UseNativeMips(), _hintAlphaChannel, _useLowLatency, _use10BitTextures, _audioDeviceOutputName, _audioOutput == Windows.AudioOutput.Unity?Helper.GetUnityAudioSampleRate():0, filters, (uint)_preferredFilters.Count);
 
 			if (filters != null)
 			{
@@ -509,21 +370,7 @@ namespace RenderHeads.Media.AVProVideo
 		{
 			CloseMedia();
 
-			_instance = Native.OpenSourceFromStream(
-				_instance,
-				ras,
-				path,
-				_videoApi,
-				_audioOutput,
-				_useHardwareDecoding,
-				_useRendererSync,
-				UseNativeMips(),
-				_hintAlphaChannel,
-				_useLowLatency,
-				_use10BitTextures,
-				_audioDeviceOutputName,
-				((_audioOutput == Windows.AudioOutput.Unity) ? Helper.GetUnityAudioSampleRate() : 0)
-			);
+			_instance = Native.OpenSourceFromStream(_instance, ras, path, _videoApi, _audioOutput, _useHardwareDecoding, UseNativeMips(), _hintAlphaChannel, _useLowLatency, _use10BitTextures, _audioDeviceOutputName, _audioOutput == Windows.AudioOutput.Unity?Helper.GetUnityAudioSampleRate():0);
 
 			if (_instance == System.IntPtr.Zero)
 			{
@@ -556,10 +403,12 @@ namespace RenderHeads.Media.AVProVideo
 			_isPlaying = false;
 			_isLooping = false;
 			_audioMuted = false;
-			_playBackRate = 1.0f;
 			_volume = 1f;
 			_balance = 0f;
 			_supportsLinearColorSpace = true;
+			_displayClockTime = 0.0;
+			_timeAccumulation = 0.0;
+			FlushFrameBuffering(true);
 			ReleaseTexture();
 			
 			if (_instance != System.IntPtr.Zero)
@@ -621,11 +470,9 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override void Stop()
 		{
-/*			_isPlaying = false;
+			_isPlaying = false;
 			_isPaused = true;
-			Native.Pause(_instance);*/
-
-			Pause();
+			Native.Pause(_instance);
 		}
 
 		public override bool IsSeeking()
@@ -634,12 +481,30 @@ namespace RenderHeads.Media.AVProVideo
 		}
 		public override bool IsPlaying()
 		{
-			return Native.IsPlaying(_instance);//_isPlaying;
+			if (_isPlaying && _frameSelectionMode != BufferedFrameSelectionMode.None)
+			{
+				// In case we're still playing the buffered frames at the end of the video
+				// We want to return true, even though internally it has stopping playing
+				if (Native.IsFinished(_instance) && !IsFinished())
+				{
+					return true;
+				}
+				// In this case internal state can change so we need to check that too
+				if (_pauseOnPrerollComplete)
+				{
+					return Native.IsPlaying(_instance);
+				}
+			}
+			return _isPlaying;
 		}
 		public override bool IsPaused()
 		{
-			// RJT TODO: 'Native.IsPaused()'?
-			return (_isPaused || (_isPlaying && !Native.IsPlaying(_instance)));//_isPaused;
+			if (_pauseOnPrerollComplete)
+			{
+				// In this case internal state can change so we need to check that too
+				return _isPaused || !Native.IsPlaying(_instance);
+			}
+			return _isPaused;
 		}
 		public override bool IsFinished()
 		{
@@ -648,15 +513,22 @@ namespace RenderHeads.Media.AVProVideo
 			if (!IsLooping())
 			{
 				result = Native.IsFinished(_instance);
-// RJT NOTE: Commented out for now as seems over-aggressive and can lead to freeze conditions as seen in: https://github.com/RenderHeads/UnityPlugin-AVProVideo/issues/1692
-// - If we need to reinstate then we'd likely need considerably more tolerance, especially on slower machines
-#if false
+
 				if (!result)
 				{
 					// This fixes a bug in Media Foundation where in some rare cases Native.IsFinished() returns false
 					result = (GetCurrentTime() > GetDuration());
 				}
-#endif
+
+				// During buffered playback we need to wait until all frames have been displayed
+				if (result && _frameSelectionMode != BufferedFrameSelectionMode.None)
+				{
+					BufferedFramesState state = GetBufferedFramesState();
+					if (state.bufferedFrameCount != 0)
+					{
+						result = false;
+					}
+				}
 			}
 
 			return result;
@@ -700,11 +572,23 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override int GetTextureFrameCount()
 		{
+#if AVPROVIDEO_SUPPORT_BUFFERED_DISPLAY
+			if (_frameSelectionMode != BufferedFrameSelectionMode.None)
+			{
+				return (int)_textureFrame.frameCounter;
+			}
+#endif
 			return Native.GetTextureFrameCount(_instance);
 		}
 
 		public override long GetTextureTimeStamp()
 		{
+#if AVPROVIDEO_SUPPORT_BUFFERED_DISPLAY
+			if (_frameSelectionMode != BufferedFrameSelectionMode.None)
+			{
+				return _textureFrame.timeStamp;
+			}
+#endif
 			return Native.GetTextureTimeStamp(_instance);
 		}
 
@@ -727,49 +611,19 @@ namespace RenderHeads.Media.AVProVideo
 
 		internal override StereoPacking InternalGetTextureStereoPacking()
 		{
-			/// [MOZ] Windows plugin internal stereo packing enum is now out of date and doesn't take into account
-			/// the changes required for supporting MV-HEVC on visionOS and Android.
-			int value = Native.GetStereoPacking(_instance);
-			
-			StereoPacking stereoPacking;
-			switch (value)
-			{
-				case 0:	// None
-					stereoPacking = StereoPacking.Monoscopic;
-					break;
-				
-				case 1: // TopBottom
-					stereoPacking = StereoPacking.TopBottom;
-					break;
-				
-				case 2:	// LeftRight
-					stereoPacking = StereoPacking.LeftRight;
-					break;
-				
-				case 3:	// CustomUV
-					stereoPacking = StereoPacking.CustomUV;
-					break;
-				
-				case 4: // TwoTextures
-					stereoPacking = StereoPacking.MultiviewLeftPrimary;
-					break;
-				
-				default:
-					stereoPacking = StereoPacking.Unknown;
-					break;
-			}
-
-			return stereoPacking;
+			return Native.GetStereoPacking(_instance);
 		}
 
 		public override void Seek(double time)
 		{
 			Native.SetCurrentTime(_instance, time, false);
+			FlushFrameBuffering(false);
 		}
 
 		public override void SeekFast(double time)
 		{
 			Native.SetCurrentTime(_instance, time, true);
+			FlushFrameBuffering(false);
 		}
 
 		public override double GetCurrentTime()
@@ -779,13 +633,12 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override void SetPlaybackRate(float rate)
 		{
-			_playBackRate = rate;
 			Native.SetPlaybackRate(_instance, rate);
 		}
 
 		public override float GetPlaybackRate()
 		{
-			return _playBackRate;//Native.GetPlaybackRate(_instance);
+			return Native.GetPlaybackRate(_instance);
 		}
 
 		public override void MuteAudio(bool bMuted)
@@ -1006,7 +859,17 @@ namespace RenderHeads.Media.AVProVideo
 			if (_hasVideo)
 			{
 				System.IntPtr newTexturePtr = System.IntPtr.Zero;
-				newTexturePtr = Native.GetTexturePointer(_instance);
+#if AVPROVIDEO_SUPPORT_BUFFERED_DISPLAY
+				if (_frameSelectionMode != BufferedFrameSelectionMode.None)
+				{
+					UpdateBufferedDisplay();
+					newTexturePtr = _textureFrame.texturePointer;
+				}
+				else
+#endif
+				{
+					newTexturePtr = Native.GetTexturePointer(_instance);
+				}
 
 				UpdateTexture(newTexturePtr);
 			}
@@ -1031,8 +894,8 @@ namespace RenderHeads.Media.AVProVideo
 			}
 			_resolvedTexture = null;
 			_texture = null;
-#if AVPROVIDEO_FIX_UPDATEEXTERNALTEXTURE_LEAK
 			_textureFrame = new TextureFrame();
+#if AVPROVIDEO_FIX_UPDATEEXTERNALTEXTURE_LEAK
 			_textureFramePrev = new TextureFrame();
 #endif
 		}
@@ -1086,13 +949,9 @@ namespace RenderHeads.Media.AVProVideo
 			if (_texture == null && _width > 0 && _height > 0 && newPtr != System.IntPtr.Zero)
 			{
 				_isTextureTopDown = Native.IsTextureTopDown(_instance);
-
-				// RJT NOTE: This flag is a bit confusing but ultimately if our incoming texture is NOT sRGB and Unity is in linear space then it should be true, else false
-				bool isLinear = (!_supportsLinearColorSpace && (QualitySettings.activeColorSpace == ColorSpace.Linear));
+				bool isLinear = (_supportsLinearColorSpace && (QualitySettings.activeColorSpace == ColorSpace.Linear));
 
 				// Texture format
-				int dxgiTextureFormat = Native.GetTextureFormat(_instance);
-#if true
 				// RJT NOTE: It seems Unity 2022/D3D12 now honours texture format here (internally creating
 				// an SRV) so 'BGRA32' is no longer valid for some of our native formats (e.g. HAP, NotchLC)
 				// - Unfortunately, there doesn't appear to be a Unity 'TextureFormat' analog for 'DXGI_FORMAT_R10G10B10A2_UNORM'
@@ -1102,62 +961,25 @@ namespace RenderHeads.Media.AVProVideo
 				//     - https://github.com/RenderHeads/UnityPlugin-AVProVideo/issues/1286
 				// RJT TODO: Once AVPC is fully integrated and texture formats addressed, move to an (ideally shared!) enum rather than DXGI indices! (WIP)
 				// - Also expand to full range of supported formats at that point too
-				TextureFormat textureFormat = TextureFormat.RGBA32;//BGRA32;	// 'RGBA8'
+				TextureFormat textureFormat = TextureFormat.BGRA32;
+				int dxgiTextureFormat = Native.GetTextureFormat(_instance);
 				switch (dxgiTextureFormat)
 				{
 					default:
+//					case 2:		// 'R8G8B8A8_UNORM' (Default, but actually 'BGRA8'/'BGRA32')
 						break;
-					case 3:		// 'BGRA8'
-						textureFormat = TextureFormat.BGRA32;
-						break;
-					case 5:		// 'RGBA16'
-						textureFormat = TextureFormat.RGBA64;
-						break;
-					case 4:		// 'RGBA10'
+					case 11:	// 'R10G10B10A2_UNORM'
 						textureFormat = TextureFormat.RGB24;//ETC_RGB4;
 						break;
-					case 8:		// 'DXT1'
+					case 6:		// 'DXT1'
 						textureFormat = TextureFormat.DXT1;
 						break;
-					case 9:		// 'DXT5'
+					case 7:		// 'DXT5'
 						textureFormat = TextureFormat.DXT5;
-						break;
-					case 12:	// 'BC7'
-						textureFormat = TextureFormat.BC7;
 						break;
 				}
 
 				_texture = Texture2D.CreateExternalTexture(_width, _height, textureFormat, UseNativeMips(), isLinear, newPtr);
-#else
-				GraphicsFormat graphicsFormat = (isLinear ? GraphicsFormat.R8G8B8A8_UNorm : GraphicsFormat.R8G8B8A8_SRGB);	// 'RGBA8'
-				switch (dxgiTextureFormat)
-				{
-					default:
-						break;
-					case 3:		// 'BGRA8'
-						graphicsFormat = (isLinear ? GraphicsFormat.B8G8R8A8_UNorm : GraphicsFormat.B8G8R8A8_SRGB);
-						break;
-					case 5:		// 'RGBA16'
-						graphicsFormat = GraphicsFormat.R16G16B16A16_UNorm;
-						break;
-					case 4:		// 'RGBA10'
-						graphicsFormat = GraphicsFormat.A2B10G10R10_UNormPack32;
-						break;
-					case 8:		// 'DXT1'
-						graphicsFormat = (isLinear ? GraphicsFormat.RGBA_DXT1_UNorm : GraphicsFormat.RGBA_DXT1_SRGB);
-						break;
-					case 9:		// 'DXT5'
-						graphicsFormat = (isLinear ? GraphicsFormat.RGBA_DXT5_UNorm : GraphicsFormat.RGBA_DXT5_SRGB);
-						break;
-					case 12:	// 'BC7'
-						graphicsFormat = (isLinear ? GraphicsFormat.RGBA_BC7_UNorm : GraphicsFormat.RGBA_BC7_SRGB);
-						break;
-				}
-
-				_texture = new Texture2D(_width, _height, /*GraphicsFormat.R8G8B8A8_UNorm*/graphicsFormat, (TextureCreationFlags.DontInitializePixels | TextureCreationFlags.DontUploadUponCreate));
-//				_texture.Reinitialize(_width, _height, graphicsFormat, UseNativeMips());
-				_texture.UpdateExternalTexture(newPtr);
-#endif
 				if (_texture != null)
 				{
 #if AVPROVIDEO_FIX_UPDATEEXTERNALTEXTURE_LEAK
@@ -1400,40 +1222,6 @@ namespace RenderHeads.Media.AVProVideo
 			return result;
 		}
 
-		// Auth data
-
-		private AuthData _nextAuthData = new AuthData();
-		public AuthData AuthenticationData
-		{ 
-			get 
-			{ 
-				return _nextAuthData;
-			}
-			set
-			{
-				_nextAuthData = value;
-				Native.SetNextAuthData(_instance, _nextAuthData);
-			}
-		}
-
-/*		public override void SetKeyServerURL(string url)
-		{
-			_nextAuthData.URL = url;
-			AuthenticationData = _nextAuthData;	
-		}*/
-
-		public override void SetKeyServerAuthToken(string token)
-		{
-			_nextAuthData.Token = token;
-			AuthenticationData = _nextAuthData;	
-		}
-
-		public override void SetOverrideDecryptionKey(byte[] key)
-		{
-			_nextAuthData.KeyBytes = key;
-			AuthenticationData = _nextAuthData;	
-		}
-
 		/*private Native.PlayerState _playerState = new Native.PlayerState();
 		private Native.AssetInfo _assetInfo = new Native.AssetInfo();*/
 
@@ -1571,19 +1359,18 @@ namespace RenderHeads.Media.AVProVideo
 			// Open and Close
 
 			[DllImport("AVProVideo")]
-			public static extern System.IntPtr BeginOpenSource(System.IntPtr instance, Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool useRendererSync,
+			public static extern System.IntPtr BeginOpenSource(System.IntPtr instance, Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding, 
 				bool generateTextureMips, bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures, [MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName,
-				int unitySampleRate, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter, uint numFilters,
-				int audio360ChannelMode, [MarshalAs(UnmanagedType.LPWStr)] string httpHeader, bool startWithHighestBitrate);
+				 int unitySampleRate, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter, uint numFilters,
+				 int audio360ChannelMode);
 
 			[DllImport("AVProVideo")]
 			public static extern System.IntPtr EndOpenSource(System.IntPtr instance, [MarshalAs(UnmanagedType.LPWStr)]string path);
 
 			[DllImport("AVProVideo")]
-			public static extern System.IntPtr OpenSourceFromBuffer(System.IntPtr instance, byte[] buffer, ulong bufferLength, Windows.VideoApi videoApi, Windows.AudioOutput audioOutput,
-				bool useHardwareDecoding, bool useRendererSync, bool generateTextureMips, bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures,
-				[MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName, int unitySampleRate, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter,
-				uint numFilters);
+			public static extern System.IntPtr OpenSourceFromBuffer(System.IntPtr instance, byte[] buffer, ulong bufferLength, Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding,
+				bool generateTextureMips, bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures, [MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName, 
+				int unitySampleRate, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter, uint numFilters);
 
 			[DllImport("AVProVideo")]
 			public static extern System.IntPtr StartOpenSourceFromBuffer(System.IntPtr instance, Windows.VideoApi videoApi, ulong bufferLength);
@@ -1595,15 +1382,15 @@ namespace RenderHeads.Media.AVProVideo
 			public static extern bool AddChunkToSourceBuffer(System.IntPtr instance, byte[] buffer, ulong offset, ulong chunkLength);
 
 			[DllImport("AVProVideo")]
-			public static extern System.IntPtr EndOpenSourceFromBuffer(System.IntPtr instance, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool useRendererSync,
-				bool generateTextureMips, bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures, [MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName,
-				int unitySampleRate, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter, uint numFilters);
+			public static extern System.IntPtr EndOpenSourceFromBuffer(System.IntPtr instance, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool generateTextureMips, bool hintAlphaChannel, 
+				bool useLowLatency, bool use10BitTextures, [MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName, int unitySampleRate,
+				[MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)]IntPtr[] preferredFilter, uint numFilters);
 
 #if NETFX_CORE
 			[DllImport("AVProVideo")]
-			public static extern System.IntPtr OpenSourceFromStream(System.IntPtr instance, IRandomAccessStream ras, [MarshalAs(UnmanagedType.LPWStr)]string path, Windows.VideoApi videoApi,
-				Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool useRendererSync, bool generateTextureMips, bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures,
-				[MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName, int unitySampleRate);
+			public static extern System.IntPtr OpenSourceFromStream(System.IntPtr instance, IRandomAccessStream ras, 
+				[MarshalAs(UnmanagedType.LPWStr)]string path, Windows.VideoApi videoApi, Windows.AudioOutput audioOutput, bool useHardwareDecoding, bool generateTextureMips, 
+				bool hintAlphaChannel, bool useLowLatency, bool use10BitTextures, [MarshalAs(UnmanagedType.LPWStr)]string forceAudioOutputDeviceName, int unitySampleRate);
 #endif
 
 			[DllImport("AVProVideo")]
@@ -1619,6 +1406,9 @@ namespace RenderHeads.Media.AVProVideo
 
 			[DllImport("AVProVideo")]
 			public static extern void SetHapNotchLCEnabled(System.IntPtr instance, bool enabled);
+
+			[DllImport("AVProVideo")]
+			public static extern void SetFrameBufferingEnabled(System.IntPtr instance, bool enabled, bool pauseOnPrerollComplete);
 
 			[DllImport("AVProVideo")]
 			public static extern void SetStereoDetectEnabled(System.IntPtr instance, bool enabled);
@@ -1695,7 +1485,7 @@ namespace RenderHeads.Media.AVProVideo
 			public static extern float GetFrameRate(System.IntPtr instance);
 
 			[DllImport("AVProVideo")]
-			public static extern int GetStereoPacking(System.IntPtr instance);
+			public static extern StereoPacking GetStereoPacking(System.IntPtr instance);
 
 			[DllImport("AVProVideo")]
 			public static extern double GetDuration(System.IntPtr instance);
@@ -1798,9 +1588,6 @@ namespace RenderHeads.Media.AVProVideo
 			public static extern float GetTexturePixelAspectRatio(System.IntPtr instance);
 
 			[DllImport("AVProVideo")]
-			public static extern void ReleaseTextureFrame(System.IntPtr instance, ref TextureFrame textureFrame);
-
-			[DllImport("AVProVideo")]
 			public static extern System.IntPtr GetRenderEventFunc();
 
 			// Audio Grabbing
@@ -1833,49 +1620,6 @@ namespace RenderHeads.Media.AVProVideo
 
 			[DllImport("AVProVideo")]
 			public static extern void SetAudioFocusRotation(System.IntPtr instance, float x, float y, float z, float w);
-
-			// Auth data
-
-			public static void SetNextAuthData(System.IntPtr instance, RenderHeads.Media.AVProVideo.AuthData srcAuthData)
-			{		
-				Native.AuthData ad = new Native.AuthData();
-				ad.url = string.IsNullOrEmpty(srcAuthData.URL) ? null : srcAuthData.URL;
-				ad.token = string.IsNullOrEmpty(srcAuthData.Token) ? null : srcAuthData.Token;
-				if (srcAuthData.KeyBytes != null && srcAuthData.KeyBytes.Length > 0)
-				{
-					ad.keyBytes = Marshal.AllocHGlobal(srcAuthData.KeyBytes.Length);
-					Marshal.Copy(srcAuthData.KeyBytes, 0, ad.keyBytes, srcAuthData.KeyBytes.Length);
-					ad.keyBytesLength = srcAuthData.KeyBytes.Length;
-				}
-				else
-				{
-					ad.keyBytes = System.IntPtr.Zero;
-					ad.keyBytesLength = 0;
-				}
-
-				SetNextAuthData(instance, ref ad);
-
-				if (ad.keyBytes != System.IntPtr.Zero)
-				{
-					Marshal.FreeHGlobal(ad.keyBytes);
-				}
-			}
-
-			[StructLayout(LayoutKind.Sequential, Pack = 1)]
-			public struct AuthData
-			{
-				[MarshalAs(UnmanagedType.LPWStr)]
-				public string url;
-
-				[MarshalAs(UnmanagedType.LPWStr)]
-				public string token;
-
-				public System.IntPtr keyBytes;
-				public int keyBytesLength;
-			};
-
-			[DllImport("AVProVideo")]
-			private static extern void SetNextAuthData(System.IntPtr instance, ref AuthData authData);
 		}
 	}
 }

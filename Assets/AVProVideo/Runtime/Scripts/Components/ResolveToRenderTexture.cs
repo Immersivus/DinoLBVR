@@ -104,6 +104,7 @@ namespace RenderHeads.Media.AVProVideo
 
 		void LateUpdate()
 		{
+			Debug.Assert(_mediaPlayer != null);
 			Resolve();
 		}
 
@@ -209,8 +210,7 @@ namespace RenderHeads.Media.AVProVideo
 		{
 			if (_internalTexture)
 			{
-				RenderTexture.ReleaseTemporary(_internalTexture);
-				_internalTexture = null;
+				RenderTexture.ReleaseTemporary(_internalTexture); _internalTexture = null;
 			}
 		}
 
@@ -218,8 +218,7 @@ namespace RenderHeads.Media.AVProVideo
 		{
 			if (_materialResolve)
 			{
-				Destroy(_materialResolve);
-				_materialResolve = null;
+				Destroy(_materialResolve); _materialResolve = null;
 			}
 		}
 #if false

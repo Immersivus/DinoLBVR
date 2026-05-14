@@ -1,48 +1,8 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2024 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS
-#endif
-
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_OPENHARMONY)
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_IOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_TVOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_TVOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_VISIONOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_VISIONOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_ANDROID
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_OPENHARMONY
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_TVOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_VISIONOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_APPLE
-#endif
-
-#if UNITY_2017_2_OR_NEWER && (AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE)
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_SUPPORTED
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_SUPPORTED
+#if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR_OSX || ( !UNITY_EDITOR && ( UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID ) ) )
 
 using System;
 using System.Runtime.InteropServices;
@@ -58,16 +18,17 @@ namespace RenderHeads.Media.AVProVideo
 
 		static PlatformMediaPlayer()
 		{
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE
-			Native.AVPPluginBootstrap();
-#endif
+			#if !UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID)
+				Native.AVPPluginBootstrap();
+			#endif
+
 			PluginRenderEventFunction = Native.AVPPluginGetRenderEventFunction();
 		}
 
 		private IntPtr _player;
 		Native.AVPPlayerSettings _playerSettings;
+
 		private MediaPlayer.PlatformOptions _options;
-		private Native.AVPPlayerFeatureFlags _supportedFeatures;
 
 		public PlatformMediaPlayer(MediaPlayer.PlatformOptions options)
 		{
@@ -91,9 +52,6 @@ namespace RenderHeads.Media.AVProVideo
 			// Make the player
 			_player = Native.AVPPluginMakePlayer(_playerSettings);
 
-			// Grab the supported feature set (we may want to do this later)
-			_supportedFeatures = Native.AVPPlayerGetSupportedFeatures(_player);
-
 			// Create the command buffers
 			CreateCommandBuffers();
 
@@ -105,119 +63,20 @@ namespace RenderHeads.Media.AVProVideo
 		}
 
 		/// <summary>
-		/// Check to see if the player is using the OES texture fast path (Android only)
-		/// </summary>
-		/// <returns>True if using the OES texture fast path</returns>
-		public bool IsUsingOESFastpath()
-		{
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
-			if (_playerTexture.planeCount > 0)
-			{
-				return _playerTexture.planes[0].textureFormat == Native.AVPPlayerTextureFormat.AndroidOES;
-			}
-			else
-			{
-				return _playerSettings.pixelFormat == Native.AVPPlayerVideoPixelFormat.YCbCr420;
-			}
-#else
-			return false;
-#endif
-		}
-
-		/// <summary>
-		/// Check to see if the player is using a YCbCr pixel format
-		/// </summary>
-		/// <returns>True if using a YCbCr pixel format, false otherwise</returns>
-		public bool IsUsingYCbCr()
-		{
-			return (_playerTexture.flags & Native.AVPPlayerTextureFlags.YCbCr) == Native.AVPPlayerTextureFlags.YCbCr;
-		}
-
-		/// <summary>
 		/// Creates the command buffers
 		/// </summary>
 		private void CreateCommandBuffers()
 		{
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
 			// We pass setup flags alongside the player id on Android
 			long playerID = _player.ToInt64();
 			Debug.Log($"playerID: {playerID:X8}");
 
 			long flags = 0;
-			MediaPlayer.OptionsAndroid optionsAndroid = _options as MediaPlayer.OptionsAndroid;
-			if (optionsAndroid != null)
-			{
-				if (optionsAndroid.textureFormat == MediaPlayer.PlatformOptions.TextureFormat.YCbCr420_OES)
-				{
-					flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.AndroidUseOESFastPath;
-				}
-
-				if (optionsAndroid.generateMipmaps)
-				{
-					flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.GenerateMipmaps;
-				}
-#if AVPRO_VIDEO_XR_COMPOSITION_LAYERS
-				if (optionsAndroid.videoOutputMode == MediaPlayer.OptionsAndroid.VideoOutputMode.XRCompositionLayer)
-				{
-					flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.XRCompositionLayer;
-				}
-#endif
-			}
-
-#if UNITY_2023_1_OR_NEWER
+			if ((_options as MediaPlayer.OptionsAndroid).textureFormat == MediaPlayer.PlatformOptions.TextureFormat.YCbCr420_OES)
+				flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.AndroidUseOESFastPath;
 			if (QualitySettings.activeColorSpace == ColorSpace.Linear)
-			{
 				flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.LinearColourSpace;
-			}
-#else
-			// With the Vulkan renderer, Unity versions prior to Unity 6 ignored the isLinear flag passed to
-			// CreateExternalTexture and as a result create a non-sRGB VkImageView for the texture. To work
-			// around this we don't support linear textures and handle gamma correction in the shader.
-			if ((SystemInfo.graphicsDeviceType != GraphicsDeviceType.Vulkan) &&
-				(QualitySettings.activeColorSpace == ColorSpace.Linear))
-			{
-				flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.LinearColourSpace;
-			}
-#endif
-
-			Debug.Log($"CreateCommandBuffers - flags: {flags:X8}");
-
-			long param = (playerID & Native.kAVPPlayerRenderEventDataPlayerIDMask) << Native.kAVPPlayerRenderEventDataPlayerIDShift;
-			param |= (flags & Native.kAVPPlayerRenderEventDataOptionsMask) << Native.kAVPPlayerRenderEventDataOptionsShift;
-			Debug.Log($"flags: {param:X8}");
-
-			IntPtr setupData = new IntPtr(param);
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-			// We pass setup flags alongside the player id on OpenHarmony
-			long playerID = _player.ToInt64();
-			Debug.Log($"playerID: {playerID:X8}");
-
-			long flags = 0;
-			MediaPlayer.OptionsOpenHarmony optionsOpenHarmony = _options as MediaPlayer.OptionsOpenHarmony;
-			if (optionsOpenHarmony != null)
-			{
-				if (optionsOpenHarmony.generateMipmaps)
-				{
-					flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.GenerateMipmaps;
-				}
-			}
-
-#if UNITY_2023_1_OR_NEWER
-			if (QualitySettings.activeColorSpace == ColorSpace.Linear)
-			{
-				flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.LinearColourSpace;
-			}
-#else
-			// With the Vulkan renderer, Unity versions prior to Unity 6 ignored the isLinear flag passed to
-			// CreateExternalTexture and as a result create a non-sRGB VkImageView for the texture. To work
-			// around this we don't support linear textures and handle gamma correction in the shader.
-			if ((SystemInfo.graphicsDeviceType != GraphicsDeviceType.Vulkan) &&
-				(QualitySettings.activeColorSpace == ColorSpace.Linear))
-			{
-				flags |= (long)Native.AVPPlayerRenderEventPlayerSetupFlags.LinearColourSpace;
-			}
-#endif
-
 			Debug.Log($"flags: {flags:X8}");
 
 			long param = (playerID & Native.kAVPPlayerRenderEventDataPlayerIDMask) << Native.kAVPPlayerRenderEventDataPlayerIDShift;
@@ -307,8 +166,6 @@ namespace RenderHeads.Media.AVProVideo
 				_playerSettings.networkFlags |= Native.AVPPlayerNetworkSettingsFlags.ForceRtpTCP;
 			if (options.forceEnableMediaCodecAsynchronousQueueing)
 				_playerSettings.videoFlags |= Native.AVPPlayerVideoOutputSettingsFlags.ForceEnableMediaCodecAsynchronousQueueing;
-			if (options.prioritiseTimeOverSize)
-				_playerSettings.networkFlags |= Native.AVPPlayerNetworkSettingsFlags.PrioritizeTimeOverSize;
 
 			switch (options.textureFormat)
 			{
@@ -333,7 +190,7 @@ namespace RenderHeads.Media.AVProVideo
 
 			// Configure the audio output settings
 			_playerSettings.audioOutputMode = (Native.AVPPlayerAudioOutputMode)options.audioMode;
-			switch (options.audioMode)
+			switch( options.audioMode )
 			{
 				case MediaPlayer.OptionsAndroid.AudioMode.Unity:
 					{
@@ -354,8 +211,8 @@ namespace RenderHeads.Media.AVProVideo
 			_playerSettings.audio360Channels = options.audio360ChannelMode;
 			_playerSettings.audio360LatencyMS = options.audio360LatencyMS;
 
-			// Configure any network settings
-			_playerSettings.preferredPeakBitRate = options.GetPreferredPeakBitRateInBitsPerSecond();
+            // Configure any network settings
+            _playerSettings.preferredPeakBitRate = options.GetPreferredPeakBitRateInBitsPerSecond();
 			if (options.startWithHighestBitrate)
 				_playerSettings.networkFlags |= Native.AVPPlayerNetworkSettingsFlags.ForceStartHighestBitrate;
 
@@ -405,17 +262,15 @@ namespace RenderHeads.Media.AVProVideo
 	// IMediaPlayer
 	public sealed partial class PlatformMediaPlayer
 	{
-		private const int MaxTexturePlanes = 4;
+		private const int MaxTexturePlanes = 2;
 		private Native.AVPPlayerState _state = new Native.AVPPlayerState();
 		private Native.AVPPlayerFlags _flags = Native.AVPPlayerFlags.None;
 		private Native.AVPPlayerAssetInfo _assetInfo = new Native.AVPPlayerAssetInfo();
 		private Native.AVPPlayerVideoTrackInfo[] _videoTrackInfo = new Native.AVPPlayerVideoTrackInfo[0];
 		private Native.AVPPlayerAudioTrackInfo[] _audioTrackInfo = new Native.AVPPlayerAudioTrackInfo[0];
 		private Native.AVPPlayerTextTrackInfo[] _textTrackInfo = new Native.AVPPlayerTextTrackInfo[0];
-		private Native.AVPPlayerVariantInfo[] _variantInfo = new Native.AVPPlayerVariantInfo[0];
 		private Native.AVPPlayerTexture _playerTexture;
 		private Native.AVPPlayerText _playerText;
-		private Native.AVPPlayerTimedMetadata _playerTimedMetadata;
 		private Texture2D[] _texturePlanes = new Texture2D[MaxTexturePlanes];
 		private float _volume = 1.0f;
 		private float _rate = 1.0f;
@@ -452,7 +307,7 @@ namespace RenderHeads.Media.AVProVideo
 				{
 					for (int i = 0; i < _assetInfo.videoTrackCount; ++i)
 					{
-						_videoTrackInfo[i] = Native.AVPPlayerVideoTrackInfo.Default;
+						_videoTrackInfo[i] = new Native.AVPPlayerVideoTrackInfo();
 						Native.AVPPlayerGetVideoTrackInfo(_player, i, ref _videoTrackInfo[i]);
 					}
 				}
@@ -462,7 +317,7 @@ namespace RenderHeads.Media.AVProVideo
 				{
 					for (int i = 0; i < _assetInfo.audioTrackCount; ++i)
 					{
-						_audioTrackInfo[i] = Native.AVPPlayerAudioTrackInfo.Default;
+						_audioTrackInfo[i] = new Native.AVPPlayerAudioTrackInfo();
 						Native.AVPPlayerGetAudioTrackInfo(_player, i, ref _audioTrackInfo[i]);
 					}
 				}
@@ -472,24 +327,12 @@ namespace RenderHeads.Media.AVProVideo
 				{
 					for (int i = 0; i < _assetInfo.textTrackCount; ++i)
 					{
-						_textTrackInfo[i] = Native.AVPPlayerTextTrackInfo.Default;
+						_textTrackInfo[i] = new Native.AVPPlayerTextTrackInfo();
 						Native.AVPPlayerGetTextTrackInfo(_player, i, ref _textTrackInfo[i]);
 					}
 				}
 
 				/*BaseMediaPlayer.*/UpdateTracks();
-
-				_variantInfo = new Native.AVPPlayerVariantInfo[_assetInfo.variantCount];
-				if (_state.status.HasVariants())
-				{
-					for (int i = 0; i < _assetInfo.variantCount; ++i)
-					{
-						_variantInfo[i] = new Native.AVPPlayerVariantInfo();
-						Native.AVPPlayerGetVariantInfo(_player, i, ref _variantInfo[i]);
-					}
-				}
-
-				/*BaseMediaPlayer.*/UpdateVariants();
 			}
 
 			if (_state.status.HasUpdatedBufferedTimeRanges())
@@ -573,48 +416,30 @@ namespace RenderHeads.Media.AVProVideo
 							break;
 					}
 
-					// If there is no native texture release Unity's texture instance
-					if (_playerTexture.planes[i].plane == IntPtr.Zero)
-					{
-						if (_texturePlanes[i] != null)
-						{
-							Texture2D.Destroy(_texturePlanes[i]);
-							_texturePlanes[i] = null;
-						}
-					}
-					else
-					// If we need to (re)create the texture
 					if (_texturePlanes[i] == null ||
 						_texturePlanes[i].width != _playerTexture.planes[i].width ||
 						_texturePlanes[i].height != _playerTexture.planes[i].height ||
 						_texturePlanes[i].format != textureFormat)
 					{
-						// Ensure the existing texture is released
+#if !UNITY_ANDROID
+						// Ensure any existing texture is released.
 						if (_texturePlanes[i] != null)
 						{
-							Texture2D.Destroy(_texturePlanes[i]);
+							_texturePlanes[i].UpdateExternalTexture(IntPtr.Zero);
 							_texturePlanes[i] = null;
 						}
-
-						bool isMipmapped = _playerTexture.flags.IsMipmapped();
-						bool isLinear = _playerTexture.flags.IsLinear();
-
-						var texture = Texture2D.CreateExternalTexture(
+#endif
+						_texturePlanes[i] = Texture2D.CreateExternalTexture(
 							_playerTexture.planes[i].width,
 							_playerTexture.planes[i].height,
 							textureFormat,
-							isMipmapped,
-							isLinear,
+							_playerTexture.flags.IsMipmapped(),
+							_playerTexture.flags.IsLinear(),
 							_playerTexture.planes[i].plane
 						);
-
-						_texturePlanes[i] = texture;
-						_texturePlanes[i].name = $"AVProVideo_ExternalTexture_{(int)_player}_{i}";
-
-						base.ApplyTextureProperties(texture);
+						base.ApplyTextureProperties(_texturePlanes[i]);
 					}
 					else
-					// Just update the texture with the new native texture
 					{
 						_texturePlanes[i].UpdateExternalTexture(_playerTexture.planes[i].plane);
 					}
@@ -634,12 +459,6 @@ namespace RenderHeads.Media.AVProVideo
 			{
 				Native.AVPPlayerGetText(_player, ref _playerText);
 				/*BaseMediaPlayer.*/UpdateTextCue();
-			}
-
-			if (_state.status.HasUpdatedTimedMetaData())
-			{
-				Native.AVPPlayerGetTimedMetadata(_player, ref _playerTimedMetadata);
-				UpdateTimedMetadata();
 			}
 
 			if (_flags.IsDirty())
@@ -756,7 +575,6 @@ namespace RenderHeads.Media.AVProVideo
 		public override void Render()
 		{
 			Graphics.ExecuteCommandBuffer(_renderCommandBuffer);
-			GL.InvalidateState();
 		}
 
 		public override IntPtr GetNativePlayerHandle()
@@ -825,17 +643,18 @@ namespace RenderHeads.Media.AVProVideo
 		{
 			Native.AVPPlayerClose(_player);
 			Update();
-
+#if !UNITY_ANDROID
 			// Clean up the textures
 			for (int i = 0; i < MaxTexturePlanes; ++i)
 			{
 				if (_texturePlanes[i] != null)
 				{
-					Texture2D.Destroy(_texturePlanes[i]);
+					_texturePlanes[i].UpdateExternalTexture(IntPtr.Zero);
 					_texturePlanes[i] = null;
 				}
 			}
-			_playerTexture.frameCounter = 0;
+			_playerTexture.frameCount = 0;
+#endif
 		}
 
 		public override void SetLooping(bool b)
@@ -992,6 +811,14 @@ namespace RenderHeads.Media.AVProVideo
 			if (_state.selectedAudioTrack > -1 && _state.selectedAudioTrack < _audioTrackInfo.Length)
 			{
 				channelCount = (int)_audioTrackInfo[_state.selectedAudioTrack].channelCount;
+				#if !UNITY_EDITOR && UNITY_IOS
+					MediaPlayer.OptionsApple options = _options as MediaPlayer.OptionsApple;
+					if (options.audioMode == MediaPlayer.OptionsApple.AudioMode.Unity)
+					{
+						// iOS audio capture will convert down to two channel stereo
+						channelCount = Math.Min(channelCount, 2);
+					}
+				#endif
 			}
 			return channelCount;
 		}
@@ -1158,17 +985,7 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override bool PlayerSupportsLinearColorSpace()
 		{
-#if !UNITY_2023_1_OR_NEWER && (AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY)
-			// With the Vulkan renderer, Unity versions prior to Unity 6 ignored the isLinear flag passed to
-			// CreateExternalTexture and as a result create an non sRGB VkImageView for the texture. To work
-			// around this we return false here. This configures our shaders to handle the gamma correction
-			// internally.
-			if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Vulkan)
-			{
-				return false;
-			}
-#endif
-			return !_playerTexture.flags.HasFlag(Native.AVPPlayerTextureFlags.Linear);
+			return _playerTexture.flags.IsLinear();
 		}
 
 		public override bool IsPlaybackStalled()
@@ -1201,7 +1018,7 @@ namespace RenderHeads.Media.AVProVideo
 		}
 	}
 
-	// ITextureProducer
+	// IMediaProducer
 	public sealed partial class PlatformMediaPlayer
 	{
 		public override int GetTextureCount()
@@ -1216,7 +1033,7 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override int GetTextureFrameCount()
 		{
-			return _playerTexture.frameCounter;
+			return _playerTexture.frameCount;
 		}
 
 		public override bool SupportsTextureFrameCount()
@@ -1255,165 +1072,6 @@ namespace RenderHeads.Media.AVProVideo
 				return Matrix4x4.identity;
 		}
 
-		public override RenderTextureFormat GetCompatibleRenderTextureFormat(GetCompatibleRenderTextureFormatOptions options, int plane)
-		{
-			// Pull out the options
-			bool forResolve = (options & GetCompatibleRenderTextureFormatOptions.ForResolve) == GetCompatibleRenderTextureFormatOptions.ForResolve;
-			bool requiresAlpha = (options & GetCompatibleRenderTextureFormatOptions.RequiresAlpha) == GetCompatibleRenderTextureFormatOptions.RequiresAlpha;
-
-			// Validate plane
-			if (plane < 0 || plane >= _playerTexture.planeCount)
-			{
-				Debug.LogWarning("PlatformMediaPlayer.GetCompatibleRenderTextureFormat - plane is out of bounds, defaulting to 0");
-				plane = 0;
-			}
-
-			if (forResolve && plane > 0)
-			{
-				// If we're resolving then just use the first plane to determine format
-				plane = 0;
-			}
-
-			// Fallback on to the default render texture format
-			RenderTextureFormat renderTextureFormat = RenderTextureFormat.Default;
-
-			switch (_playerTexture.planes[plane].textureFormat)
-			{
-				case Native.AVPPlayerTextureFormat.Unknown:
-				default:
-					// Return the default if we don't know the texture format
-					break;
-
-				// Four channel 8 bits per component
-				case Native.AVPPlayerTextureFormat.BGRA8:
-				case Native.AVPPlayerTextureFormat.BC1:
-				case Native.AVPPlayerTextureFormat.BC3:
-				case Native.AVPPlayerTextureFormat.BC7:
-				case Native.AVPPlayerTextureFormat.AndroidOES:
-					renderTextureFormat = RenderTextureFormat.ARGB32;
-					break;
-
-				// Single channel 8 bit
-				case Native.AVPPlayerTextureFormat.R8:
-				case Native.AVPPlayerTextureFormat.BC4:
-					if (forResolve && _playerTexture.planeCount > 1)
-					{
-						// YCbCr8 format
-						renderTextureFormat = RenderTextureFormat.ARGB32;
-					}
-					else
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R8))
-					{
-						renderTextureFormat = RenderTextureFormat.R8;
-					}
-					break;
-
-				// Two channel 8 bits per component
-				case Native.AVPPlayerTextureFormat.RG8:
-				case Native.AVPPlayerTextureFormat.BC5:
-					// Could be a YCbCr format but the first plane should always be luma only so ignore any resolve request
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RG16))
-					{
-						renderTextureFormat = RenderTextureFormat.RG16;
-					}
-					break;
-
-				// Four channel 10 bit RGB 2 bit alpha
-				case Native.AVPPlayerTextureFormat.BGR10A2:
-					if (requiresAlpha)
-					{
-						// As alpha is required use 16 bit per component texture to preserve bit depth
-						if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RGBAUShort))
-						{
-							renderTextureFormat = RenderTextureFormat.RGBAUShort;
-						}
-						else
-						if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf))
-						{
-							// Fallback on half precision float
-							renderTextureFormat = RenderTextureFormat.ARGBHalf;
-						}
-					}
-					else
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGB2101010))
-					{
-						renderTextureFormat = RenderTextureFormat.ARGB2101010;
-					}
-					else
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf))
-					{
-						// Return half precision float if 10 bit not directly supported
-						renderTextureFormat = RenderTextureFormat.ARGBHalf;
-					}
-					break;
-
-				// Single channel 16 bit component
-				case Native.AVPPlayerTextureFormat.R16:
-					if (forResolve && _playerTexture.planeCount > 1)
-					{
-						// YCbCr16 format - user 16 bit per component render texture format
-						if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGB64))
-						{
-							renderTextureFormat = RenderTextureFormat.ARGB64;
-						}
-						else
-						if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf))
-						{
-							// Try half precision float if 16bit Unorm not supported
-							renderTextureFormat = RenderTextureFormat.ARGBHalf;
-						}
-					}
-					else
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R16))
-					{
-						renderTextureFormat = RenderTextureFormat.R16;
-					}
-					else if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RHalf))
-					{
-						// Return half precision float if 16 bit not directly supported
-						renderTextureFormat = RenderTextureFormat.RHalf;
-					}
-					break;
-
-				// Two channel 16 bit per component
-				case Native.AVPPlayerTextureFormat.RG16:
-					// Could be a YCbCr format but first plane should be luma only so ignore the forResolve flag
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RG32))
-					{
-						renderTextureFormat = RenderTextureFormat.RG32;
-					}
-					else if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RGHalf))
-					{
-						// Return half precision float if 16 bit not directly supported
-						renderTextureFormat = RenderTextureFormat.RGHalf;
-					}
-					break;
-
-				// Three channel 10 bit per component with extended range
-				case Native.AVPPlayerTextureFormat.BGR10XR:
-					if (SystemInfo.SupportsRenderTextureFormat(requiresAlpha ? RenderTextureFormat.BGRA10101010_XR : RenderTextureFormat.BGR101010_XR))
-					{
-						renderTextureFormat = requiresAlpha ? RenderTextureFormat.BGRA10101010_XR : RenderTextureFormat.BGR101010_XR;
-					}
-					else
-					{
-						// Return default HDR format if 10 bit XR not directly supported
-						renderTextureFormat = RenderTextureFormat.DefaultHDR;
-					}
-					break;
-
-				// Four channel half precision float
-				case Native.AVPPlayerTextureFormat.RGBA16Float:
-					if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf))
-					{
-						renderTextureFormat = RenderTextureFormat.ARGBHalf;
-					}
-					break;
-			}
-
-			return renderTextureFormat;
-		}
-
 		internal override StereoPacking InternalGetTextureStereoPacking()
 		{
 			if (_videoTrackInfo.Length > 0 && _state.selectedVideoTrack >= 0)
@@ -1422,46 +1080,20 @@ namespace RenderHeads.Media.AVProVideo
 				{
 					case Native.AVPPlayerVideoTrackStereoMode.Unknown:
 						return StereoPacking.Unknown;
-
 					case Native.AVPPlayerVideoTrackStereoMode.Monoscopic:
-						return StereoPacking.Monoscopic;
-
-					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicTopBottom:
-						return StereoPacking.TopBottom;
-
+						return StereoPacking.None;
 					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicLeftRight:
 						return StereoPacking.LeftRight;
-
+					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicTopBottom:
+						return StereoPacking.TopBottom;
+					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicRightLeft:
+						return StereoPacking.Unknown;
 					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicCustom:
 						return StereoPacking.CustomUV;
-
-					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicRightLeft:
-						return StereoPacking.RightLeft;
-
-					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicMultiviewLeftPrimary:
-						return StereoPacking.MultiviewLeftPrimary;
-
-					case Native.AVPPlayerVideoTrackStereoMode.StereoscopicMultiviewRightPrimary:
-						return StereoPacking.MultiviewRightPrimary;
 				}
 			}
 			return StereoPacking.Unknown;
 		}
-	}
-
-	// ITimedMetadata
-	public sealed partial class PlatformMediaPlayer
-	{
-		protected override bool InternalHasUpdatedTimedMetadata()
-		{
-			return _state.status.HasUpdatedTimedMetaData();
-		}
-
-        protected override TimedMetadataItem InternalGetTimedMetadataItem()
-        {
-			string text = Marshal.PtrToStringUni(_playerTimedMetadata.buffer, _playerTimedMetadata.length);
-			return new TimedMetadataItem(_playerTimedMetadata.itemTime, text);
-        }
 	}
 
 	// IDispose
@@ -1485,15 +1117,7 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override string GetExpectedVersion()
 		{
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
-			return Helper.ExpectedPluginVersion.Android;
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-			return Helper.ExpectedPluginVersion.OpenHarmony;
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_APPLE
 			return Helper.ExpectedPluginVersion.Apple;
-#else
-			return "";
-#endif
 		}
 	}
 
@@ -1536,17 +1160,6 @@ namespace RenderHeads.Media.AVProVideo
 				default:
 					return false;
 			}
-		}
-
-		public override void SelectVariant(Variant variant)
-		{
-			Native.AVPPlayerSelectVariant(_player, variant.Id);
-		}
-
-		public override Variant GetSelectedVariant()
-		{
-			Variant variant = _variants.Find( element => element.Id == _state.selectedVariant ); 
-			return ( variant != null ) ? variant : Variant.Auto;
 		}
 
 		internal override TrackBase InternalGetTrackInfo(TrackType type, int index, ref bool isActiveTrack)
@@ -1599,42 +1212,16 @@ namespace RenderHeads.Media.AVProVideo
 			else
 				return null;
 		}
-
-		internal override int InternalGetVariantCount()
-		{
-			// Debug.Log($"InternalGetVariantCount -> {_assetInfo.variantCount}");
-			return _assetInfo.variantCount;
-		}
-
-		internal override Variant InternalGetVariantAtIndex(int index)
-		{
-			if (index >= 0 && index < _variantInfo.Length)
-			{
-				int width = (int)_variantInfo[index].dimensions.width;
-				int height = (int)_variantInfo[index].dimensions.height;
-				int peakDataRate = _variantInfo[index].peakDataRate;
-				int averageDataRate = _variantInfo[index].averageDataRate;
-				CodecType videoCodecType = _variantInfo[index].videoCodecType;
-				float frameRate = _variantInfo[index].frameRate;
-				VideoRange videoRange = (VideoRange)_variantInfo[index].videoRange;
-				CodecType audioCodecType = _variantInfo[index].audioCodecType;
-				// Debug.Log($"InternalGetVariantAtIndex({index}) - width: {width}, height: {height}, peakDataRate: {peakDataRate}, averageDateRate: {averageDataRate}, frameRate: {frameRate}, videoRange: {videoRange}, audioCodecType: {audioCodecType}");
-				return new Variant(index, width, height, peakDataRate, averageDataRate, videoCodecType, frameRate, videoRange, audioCodecType);
-			}
-			else
-			{
-				return null;
-			}
-		}
 	}
 
+#if !UNITY_EDITOR && UNITY_IOS
 	// Media Caching
 	public sealed partial class PlatformMediaPlayer
 	{
-		public override bool IsMediaCachingSupported()
-		{
-			return (_supportedFeatures & Native.AVPPlayerFeatureFlags.Caching) == Native.AVPPlayerFeatureFlags.Caching;
-		}
+        public override bool IsMediaCachingSupported()
+        {
+            return true;
+        }
 
 		public override void AddMediaToCache(string url, string headers, MediaCachingOptions options)
 		{
@@ -1655,7 +1242,7 @@ namespace RenderHeads.Media.AVProVideo
 				}
 			}
 
-			Native.AVPPlayerCacheMediaForURL(_player, url, headers, nativeOptions);
+			Native.AVPPluginCacheMediaForURL(url, headers, nativeOptions);
 
 			if (artworkHandle.IsAllocated)
 			{
@@ -1665,29 +1252,20 @@ namespace RenderHeads.Media.AVProVideo
 
 		public override void CancelDownloadOfMediaToCache(string url)
 		{
-			Native.AVPPlayerCancelDownloadOfMediaForURL(_player, url);
-		}
-
-		public override void PauseDownloadOfMediaToCache(string url)
-		{
-			Native.AVPPlayerPauseDownloadOfMediaForURL(_player, url);
-		}
-
-		public override void ResumeDownloadOfMediaToCache(string url)
-		{
-			Native.AVPPlayerResumeDownloadOfMediaForURL(_player, url);
+			Native.AVPPluginCancelDownloadOfMediaForURL(url);
 		}
 
 		public override void RemoveMediaFromCache(string url)
 		{
-			Native.AVPPlayerRemoveCachedMediaForURL(_player, url);
+			Native.AVPPluginRemoveCachedMediaForURL(url);
 		}
 
-		public override CachedMediaStatus GetCachedMediaStatus(string url, ref float progress)
-		{
-			return (CachedMediaStatus)Native.AVPPlayerGetCachedMediaStatusForURL(_player, url, ref progress);
-		}
+        public override CachedMediaStatus GetCachedMediaStatus(string url, ref float progress)
+        {
+			return (CachedMediaStatus)Native.AVPPluginGetCachedMediaStatusForURL(url, ref progress);
+        }
 	}
+#endif
 }
 
 #endif

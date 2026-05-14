@@ -51,11 +51,7 @@
 
 		INLINE bool Android_IsStereoEyeLeft()
 		{
-			#if defined(FORCEEYE_LEFT)
-				return true;
-			#elif defined(FORCEEYE_RIGHT)
-				return false;
-			#elif defined(STEREO_MULTIVIEW_ON)
+			#if defined(STEREO_MULTIVIEW_ON)
 				int eyeIndex = SetupStereoEyeIndex();
 				return (eyeIndex == 0);
 			#else
@@ -98,7 +94,7 @@
 #if defined(HIGH_QUALITY)
 				texNormal = normalize(gl_Normal.xyz);
 	#if defined(STEREO_TOP_BOTTOM) || defined(STEREO_LEFT_RIGHT)
-				texScaleOffset = GetStereoScaleOffset(Android_IsStereoEyeLeft(), true);
+				texScaleOffset = GetStereoScaleOffset(Android_IsStereoEyeLeft(), false);
 	#endif
 #else
 				texVal.xy = gl_MultiTexCoord0.xy;
@@ -238,7 +234,7 @@
 #endif
 				col *= _Color;
 
-#if defined(APPLY_GAMMA) && !defined(USING_DEFAULT_TEXTURE)
+#if defined(APPLY_GAMMA)
 				col.rgb = GammaToLinear(col.rgb);
 #endif
 

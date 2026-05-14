@@ -1,6 +1,4 @@
-﻿#if !UNITY_OPENHARMONY
-
-#if UNITY_ANDROID
+﻿#if UNITY_ANDROID
 	#if USING_URP
 		#define ANDROID_URP
 	#endif
@@ -178,5 +176,3 @@ namespace RenderHeads.Media.AVProVideo
 		}
 	}
 }
-
-#endif

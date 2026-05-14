@@ -34,6 +34,10 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			if (IsTargetMacOS(target) || target == BuildTarget.iOS || target == BuildTarget.tvOS)
 			{
 				int indexMetal = GetGraphicsApiIndex(target, GraphicsDeviceType.Metal);
+				int indexOpenGLCore = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLCore);
+				int indexOpenGLES2 = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLES2);
+				int indexOpenGLES3 = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLES3);
+
 				if (indexMetal < 0)
 				{
 					string message = "Metal graphics API is required by AVPro Video.";
@@ -41,7 +45,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					ShowAbortDialog(message);
 				}
 
-				int indexOpenGLCore = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLCore);
 				if (indexOpenGLCore >= 0 && indexMetal >=0 && indexOpenGLCore < indexMetal)
 				{
 					string message = "OpenGL graphics API is not supported by AVPro Video.";
@@ -49,8 +52,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					message += "\n\nPlease go to Player Settings > Auto Graphics API and add Metal to the top of the list.";
 					ShowAbortDialog(message);
 				}
-#if !UNITY_2023_1_OR_NEWER
-				int indexOpenGLES2 = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLES2);
+
 				if (indexOpenGLES2 >= 0 && indexMetal >=0 && indexOpenGLES2 < indexMetal)
 				{
 					string message = "OpenGLES2 graphics API is not supported by AVPro Video.";
@@ -58,8 +60,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					message += "\n\nPlease go to Player Settings > Auto Graphics API and add Metal to the top of the list.";
 					ShowAbortDialog(message);
 				}
-#endif
-				int indexOpenGLES3 = GetGraphicsApiIndex(target, GraphicsDeviceType.OpenGLES3);
+
 				if (indexOpenGLES3 >= 0 && indexMetal >=0 && indexOpenGLES3 < indexMetal)
 				{
 					string message = "OpenGLES3 graphics API is not supported by AVPro Video.";
@@ -72,22 +73,11 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			int indexVulkan = GetGraphicsApiIndex(target, GraphicsDeviceType.Vulkan);
 			if (indexVulkan >= 0)
 			{
-				if (target != BuildTarget.Android
-#if UNITY_OPENHARMONY
-					&& target != BuildTarget.OpenHarmony
-#endif
-					)
+				if (target != BuildTarget.Android)
 				{
 					string message = "Vulkan graphics API is not supported by AVPro Video.";
 					message += "\n\nPlease go to Player Settings > Auto Graphics API and remove Vulkan from the list.";
 					ShowAbortDialog(message);
-				}
-				else
-				{
-#if !UNITY_2020_1_OR_NEWER
-					string message = "Vulkan graphics API is not supported by AVPro Video in Unity 2019 and lower.";
-					ShowAbortDialog( message );
-#endif
 				}
 			}
 		}
@@ -102,11 +92,11 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 		static bool IsTargetMacOS(BuildTarget target)
 		{
-#if UNITY_2017_3_OR_NEWER
+			#if UNITY_2017_3_OR_NEWER
 			return (target == BuildTarget.StandaloneOSX);
-#else
+			#else
 			return (target == BuildTarget.StandaloneOSXUniversal || target == BuildTarget.StandaloneOSXIntel);
-#endif
+			#endif
 		}
 
 		static int GetGraphicsApiIndex(BuildTarget target, GraphicsDeviceType api)

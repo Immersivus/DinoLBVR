@@ -61,6 +61,10 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					{
 						mediaPlayer.Rewind(true);
 					}
+					if (GUILayout.Button("Preroll"))
+					{
+						mediaPlayer.RewindPrerollPause();
+					}
 					if (GUILayout.Button("End"))
 					{
 						mediaPlayer.Control.Seek(mediaPlayer.Info.GetDuration());
@@ -210,21 +214,17 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					bool isExtensionMOV = fullPath.ToLower().EndsWith(".mov");
 					bool isExtensionMKV = fullPath.ToLower().EndsWith(".mkv");
 
-				#if false
-					// [MOZ] 250311 .mov files seem to be working fine on android
 					if (isPlatformAndroid && isExtensionMOV)
 					{
 						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "MOV file detected. Android doesn't support MOV files, you should change the container file.");
 					}
-					// [MOZ] 250311 Android 8.0 is the minimum now so we can skip this
-					if (isPlatformAndroid && isExtensionMKV)
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "MKV file detected. Android doesn't support MKV files until Android 5.0.");
-					}
-				#endif
 					if (isPlatformAndroid && isExtensionAVI)
 					{
 						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "AVI file detected. Android doesn't support AVI files, you should change the container file.");
+					}
+					if (isPlatformAndroid && isExtensionMKV)
+					{
+						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "MKV file detected. Android doesn't support MKV files until Android 5.0.");
 					}
 					if (isPlatformIOS && isExtensionAVI)
 					{
@@ -234,13 +234,9 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 				if (fullPath.Contains("://"))
 				{
-					if (fullPath.ToLower().Contains("rtsp://"))
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "RTMP protocol is not supported by AVPro Video, except when Windows DirectShow is used with an external codec library (eg LAV Filters) and Android (limited functionality when using the MediaPlayer API)");
-					}
 					if (fullPath.ToLower().Contains("rtmp://"))
 					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "RTMP protocol is not supported by AVPro Video, except when Windows DirectShow is used with an external codec library (eg LAV Filters) and Android when ExoPlayer is used");
+						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "RTMP protocol is not supported by AVPro Video, except when Windows DirectShow is used with an external codec library (eg LAV Filters)");
 					}
 					if (fullPath.ToLower().Contains("youtube.com/watch"))
 					{
@@ -328,8 +324,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 									bool caseMatch = false;
 									try
 									{
-										string ext = System.IO.Path.GetExtension(fullPath);
-										files = System.IO.Directory.GetFiles(folderPath, $"*{ext}", System.IO.SearchOption.TopDirectoryOnly);
+										files = System.IO.Directory.GetFiles(folderPath, "*", System.IO.SearchOption.TopDirectoryOnly);
 									}
 									catch
 									{
@@ -339,16 +334,11 @@ namespace RenderHeads.Media.AVProVideo.Editor
 									}
 									if (files != null && files.Length > 0)
 									{
-										string modifiedFullPath = fullPath;
-#if UNITY_EDITOR_WIN
-										// Ensure fullPath is not using \ for the comparison
-										modifiedFullPath = modifiedFullPath.Replace('\\', '/');
-#endif
 										for (int i = 0; i < files.Length; i++)
 										{
 											string filePath = System.IO.Path.Combine(folderPath, files[i]);
 											filePath = filePath.Replace('\\', '/');
-											if (filePath == modifiedFullPath)
+											if (filePath == fullPath)
 											{
 												caseMatch = true;
 												break;

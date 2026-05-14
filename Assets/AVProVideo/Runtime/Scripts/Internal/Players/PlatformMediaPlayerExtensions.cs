@@ -2,7 +2,7 @@
 // Copyright 2015-2024 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
-#if UNITY_2017_2_OR_NEWER && (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || (!UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_OPENHARMONY)))
+#if UNITY_2017_2_OR_NEWER && (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || (!UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID)))
 
 using System;
 using System.Runtime.InteropServices;
@@ -94,11 +94,6 @@ namespace RenderHeads.Media.AVProVideo
 			return (status & PlatformMediaPlayer.Native.AVPPlayerStatus.UpdatedText) == PlatformMediaPlayer.Native.AVPPlayerStatus.UpdatedText;
 		}
 
-		internal static bool HasUpdatedTimedMetaData(this PlatformMediaPlayer.Native.AVPPlayerStatus status)
-		{
-			return (status & PlatformMediaPlayer.Native.AVPPlayerStatus.UpdatedTimedMetadata) == PlatformMediaPlayer.Native.AVPPlayerStatus.UpdatedTimedMetadata;
-		}
-
 		internal static bool HasVideo(this PlatformMediaPlayer.Native.AVPPlayerStatus status)
 		{
 			return (status & PlatformMediaPlayer.Native.AVPPlayerStatus.HasVideo) == PlatformMediaPlayer.Native.AVPPlayerStatus.HasVideo;
@@ -122,11 +117,6 @@ namespace RenderHeads.Media.AVProVideo
 		internal static bool HasFailed(this PlatformMediaPlayer.Native.AVPPlayerStatus status)
 		{
 			return (status & PlatformMediaPlayer.Native.AVPPlayerStatus.Failed) == PlatformMediaPlayer.Native.AVPPlayerStatus.Failed;
-		}
-
-		internal static bool HasVariants(this PlatformMediaPlayer.Native.AVPPlayerStatus status)
-		{
-			return (status & PlatformMediaPlayer.Native.AVPPlayerStatus.HasVariants) == PlatformMediaPlayer.Native.AVPPlayerStatus.HasVariants;
 		}
 
 		// AVPPlayerFlags

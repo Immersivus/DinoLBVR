@@ -1,31 +1,21 @@
-//-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
-//-----------------------------------------------------------------------------
-
-#define UNITY_PLATFORM_SUPPORTS_LINEAR
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_IOS || UNITY_ANDROID
+	#define UNITY_PLATFORM_SUPPORTS_LINEAR
+#endif
 
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+//-----------------------------------------------------------------------------
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
+//-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo
 {
 	/// <summary>
 	/// Base class for all platform specific MediaPlayers
 	/// </summary>
-	public abstract partial class BaseMediaPlayer
-	: IMediaPlayer
-	, IMediaControl
-	, IMediaInfo
-	, IMediaCache
-	, ITextureProducer
-	, IMediaSubtitles
-	, IVideoTracks
-	, IAudioTracks
-	, ITextTracks
-	, ITimedMetadata
-	, IVariants
-	, System.IDisposable
+	public abstract partial class BaseMediaPlayer : IMediaPlayer, IMediaControl, IMediaInfo, IMediaCache, ITextureProducer, IMediaSubtitles, IVideoTracks, IAudioTracks, ITextTracks, IBufferedDisplay, System.IDisposable
 	{
 		public BaseMediaPlayer()
 		{
@@ -122,7 +112,7 @@ namespace RenderHeads.Media.AVProVideo
 		/// <inheritdoc/>
 		public abstract bool		HasVideo();
 		/// <inheritdoc/>
-		public bool 				IsVideoStereo() { return GetTextureStereoPacking() != StereoPacking.Monoscopic; }
+		public bool 				IsVideoStereo() { return GetTextureStereoPacking() != StereoPacking.None; }
 
 		// Basic State
 		/// <inheritdoc/>
@@ -171,12 +161,6 @@ namespace RenderHeads.Media.AVProVideo
 			Vector4 v3 = new Vector4(transform[4], transform[5], 0, 1);
 			Matrix4x4 xfrm = new Matrix4x4(v0, v1, v2, v3);
 			return xfrm;
-		}
-		/// <inheritdoc/>
-		public virtual RenderTextureFormat GetCompatibleRenderTextureFormat(GetCompatibleRenderTextureFormatOptions options, int plane)
-		{
-			// Just return the default
-			return RenderTextureFormat.Default;
 		}
 
 		public StereoPacking GetTextureStereoPacking()
@@ -301,6 +285,21 @@ namespace RenderHeads.Media.AVProVideo
 
 		// Internal method
 		public virtual bool GetDecoderPerformance(ref int activeDecodeThreadCount, ref int decodedFrameCount, ref int droppedFrameCount) { return false; }
+
+#if false
+		public void Update()
+		{
+			Native.Update(_instance);
+			if (UpdateTracks())
+			{
+
+			}
+			if (UpdateTextCue())
+			{
+
+			}
+		}
+#endif
 
 		public virtual void EndUpdate() { }
 
@@ -625,6 +624,40 @@ namespace RenderHeads.Media.AVProVideo
 				Seek(time);
 			}
 		}
+
+		#region IBufferedDisplay Implementation
+
+		private int _unityFrameCountBufferedDisplayGuard = -1;
+
+		/// <inheritdoc/>
+		public long UpdateBufferedDisplay()
+		{
+			// Guard to make sure we're only updating the buffered frame once per Unity frame
+			if (Time.frameCount == _unityFrameCountBufferedDisplayGuard) return GetTextureTimeStamp();
+
+			_unityFrameCountBufferedDisplayGuard = Time.frameCount;
+
+			return InternalUpdateBufferedDisplay();
+		}
+
+		internal virtual long InternalUpdateBufferedDisplay() { return 0; }
+
+		/// <inheritdoc/>
+		public virtual BufferedFramesState GetBufferedFramesState()
+		{
+			return new BufferedFramesState();
+		}
+
+		/// <inheritdoc/>
+		public virtual void SetSlaves(IBufferedDisplay[] slaves) { }
+
+		/// <inheritdoc/>
+		public virtual void SetBufferedDisplayMode(BufferedFrameSelectionMode mode, IBufferedDisplay master = null) { }
+
+		/// <inheritdoc/>
+		public virtual void SetBufferedDisplayOptions(bool pauseOnPrerollComplete) { }
+
+		#endregion // IBufferedDisplay Implementation
 
 		protected PlaybackQualityStats _playbackQualityStats = new PlaybackQualityStats();
 

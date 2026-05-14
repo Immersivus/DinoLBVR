@@ -29,6 +29,53 @@ namespace RenderHeads.Media.AVProVideo
 		string GetSubtitleText();
 	}
 
+	public enum BufferedFrameSelectionMode : int
+	{
+		// No buffering, just selects the latest decoded frame
+		None = 0,
+
+		// Selects the newest buffered frame, and displays it until a newer frame is available
+		NewestFrame = 10,
+
+		// Selects the oldest buffered frame, and displays it until a newer frame is available
+		OldestFrame = 11,
+
+		// Selects the next buffered frame, and displays it until the number of buffered frames changes
+		MediaClock = 20,
+
+		// Uses Time.deltaTime to keep a clock which is used to select the buffered frame
+		ElapsedTime = 30,
+
+		// Uses VSync delta time to keep a clock which is used to select the buffered frame
+		// Time.deltaTime is used to calculate the number of vsyncs that have elapsed
+		ElapsedTimeVsynced = 40,
+
+		// Selects the buffered frame corresponding to the external timeStamp (useful for frame-syncing players)
+		FromExternalTime = 50,
+
+		// Selects the closest buffered frame corresponding to the external timeStamp (useful for frame-syncing players)
+		FromExternalTimeClosest = 51,
+	}
+
+	/// <summary>
+	/// Interface for buffering frames for more control over the timing of their display
+	/// </summary>
+	public interface IBufferedDisplay
+	{
+		/// <summary>
+		/// We need to manually call UpdateBufferedDisplay() in the case of master-slave synced playback so that master is updated before slaves
+		/// </summary>
+		long						UpdateBufferedDisplay();
+
+		BufferedFramesState			GetBufferedFramesState();
+
+		void						SetSlaves(IBufferedDisplay[] slaves);
+
+		void						SetBufferedDisplayMode(BufferedFrameSelectionMode mode, IBufferedDisplay master = null);
+
+		void						SetBufferedDisplayOptions(bool pauseOnPrerollComplete);
+	}
+
 	public interface IMediaControl
 	{
 		/// <summary>
@@ -264,11 +311,13 @@ namespace RenderHeads.Media.AVProVideo
 		/// </summary>
 		string GetPlayerDescription();
 
+#if !AVPRO_NEW_GAMMA
 		/// <summary>
 		/// Whether this MediaPlayer instance supports linear color space
 		/// If it doesn't then a correction may have to be made in the shader
 		/// </summary>
 		bool PlayerSupportsLinearColorSpace();
+#endif
 
 		/// <summary>
 		/// Checks if the playback is in a stalled state
@@ -460,27 +509,16 @@ namespace RenderHeads.Media.AVProVideo
 		/// </summary>
 		Matrix4x4 GetTextureMatrix();
 
+#if AVPRO_NEW_GAMMA
 		/// <summary>
-		/// Get a render texture format that is compatible with the textures internal format
+		/// Returns the gamma type of a sampled pixel
+		/// Is the texture returns samples in linear gamma then no conversion is need when using Unity's linear color space mode
+		/// If it doesn't then a correction may have to be made in the shader
 		/// </summary>
-		/// <param name="options">Any options that may change the choice of render texture format, defaults to None</param>
-		/// <param name="plane">Index of the plane to get compatible render texture format for, defaults to the first plane</param>
-		/// <returns>A compatible render texture format</returns>
-		RenderTextureFormat GetCompatibleRenderTextureFormat(GetCompatibleRenderTextureFormatOptions options = GetCompatibleRenderTextureFormatOptions.Default, int plane = 0);
-	}
+		TextureGamma GetTextureSampleGamma();
 
-	/// <summary>
-	/// Options for passing into GetCompatibleRenderTextureFormat
-	/// </summary>
-	[Flags]
-	public enum GetCompatibleRenderTextureFormatOptions
-	{
-		/// <summary>No options, default behaviour based on the texture's format</summary>
-		Default = 0,
-		/// <summary>The format is for a final resolve, i.e. converting from YCbCr to RGBA</summary>
-		ForResolve = 1 << 0,
-		/// <summary>The format requires an alpha channel</summary>
-		RequiresAlpha = 1 << 1,
+		bool TextureRequiresGammaConversion();
+#endif
 	}
 
 	public enum Platform
@@ -493,15 +531,14 @@ namespace RenderHeads.Media.AVProVideo
 		Android,
 		WindowsUWP,
 		WebGL,
-		OpenHarmony,
-		Count = 8,
+		Count = 7,
 		Unknown = 100,
 	}
 
 	public enum MediaSource
 	{
 		Reference,
-		Path
+		Path,
 	}
 
 	public enum MediaPathType
@@ -552,11 +589,6 @@ namespace RenderHeads.Media.AVProVideo
 			return result;
 		}
 
-		public static implicit operator MediaPath(string s)
-		{
-			return new MediaPath(s, MediaPathType.AbsolutePathOrURL);
-		}
-
 		public static bool operator == (MediaPath a, MediaPath b)
 		{
 			if ((object)a == null)
@@ -602,20 +634,12 @@ namespace RenderHeads.Media.AVProVideo
 
 	public enum StereoPacking : int
 	{
-		Unknown = -1,
-		Monoscopic,					// Monoscopic
-		TopBottom,					// Top is the left eye, bottom is the right eye
-		LeftRight,					// Left is the left eye, right is the right eye
-		CustomUV,					// Use the mesh UV to unpack, uv0=left eye, uv1=right eye
-		RightLeft,					// Left side is the right eye, right side is the left eye
-		MultiviewLeftPrimary,       // First texture left eye, second texture is right eye
-		MultiviewRightPrimary,      // First texture right eye, second texture is left eye
-
-		[Obsolete]
-		None = Monoscopic,
-
-		[Obsolete]
-		TwoTextures = MultiviewLeftPrimary
+		None = 0,					// Monoscopic
+		TopBottom = 1,				// Top is the left eye, bottom is the right eye
+		LeftRight = 2,				// Left is the left eye, right is the right eye
+		CustomUV = 3,				// Use the mesh UV to unpack, uv0=left eye, uv1=right eye
+		TwoTextures = 4,			// First texture left eye, second texture is right eye
+		Unknown = 10,
 	}
 
 	[System.Serializable]
@@ -780,14 +804,6 @@ namespace RenderHeads.Media.AVProVideo
 			ExoPlayer,
 		}
 
-		public enum VideoOutputMode
-		{
-			Texture,
-#if AVPRO_VIDEO_XR_COMPOSITION_LAYERS
-			XRCompositionLayer
-#endif
-		}
-
 		public enum AudioOutput
 		{
 			System,						// Default
@@ -802,10 +818,10 @@ namespace RenderHeads.Media.AVProVideo
 			Trilinear,
 		}
 
-		public const int Default_MinBufferTimeMs					= 10000;	// [MOZ] lowered as seeing OOM issues on 4k videos
-		public const int Default_MaxBufferTimeMs					= 50000;	// [MOZ] taken from DefaultLoadControl.DEFAULT_MAX_BUFFER_MS
-		public const int Default_BufferForPlaybackMs				= 1000;		// [MOZ] taken from DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS
-		public const int Default_BufferForPlaybackAfterRebufferMs	= 2000;		// [MOZ] takan from DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+		public const int Default_MinBufferTimeMs					= 50000;	// Only valid when using ExoPlayer (default comes from DefaultLoadControl.DEFAULT_MIN_BUFFER_MS)
+		public const int Default_MaxBufferTimeMs					= 50000;	// Only valid when using ExoPlayer (default comes from DefaultLoadControl.DEFAULT_MAX_BUFFER_MS)
+		public const int Default_BufferForPlaybackMs				= 2500;		// Only valid when using ExoPlayer (default comes from DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS)
+		public const int Default_BufferForPlaybackAfterRebufferMs	= 5000;		// Only valid when using ExoPlayer (default comes from DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS)
 	}
 
 	public static class WebGL
@@ -884,6 +900,16 @@ namespace RenderHeads.Media.AVProVideo
 		Unknown = 0,
 		TopDown = 1 << 0,
 		SamplingIsLinear = 1 << 1,
+	}
+
+	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 1)]
+	public struct BufferedFramesState
+	{
+		public System.Int32 freeFrameCount;
+		public System.Int32 bufferedFrameCount;
+		public System.Int64 minTimeStamp;
+		public System.Int64 maxTimeStamp;
+		public System.Int32 prerolledCount;
 	}
 
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 1)]

@@ -24,7 +24,6 @@ namespace RenderHeads.Media.AVProVideo
 		[SerializeField] MediaReference _macOS = null;
 		[SerializeField] MediaReference _windows = null;
 		[SerializeField] MediaReference _android = null;
-		[SerializeField] MediaReference _openharmony = null;
 		[SerializeField] MediaReference _iOS = null;
 		[SerializeField] MediaReference _tvOS = null;
 		[SerializeField] MediaReference _windowsUWP = null;
@@ -73,8 +72,6 @@ namespace RenderHeads.Media.AVProVideo
 			result = GetPlatformMediaReference(Platform.WindowsUWP);
 		#elif (!UNITY_EDITOR && UNITY_ANDROID)
 			result = GetPlatformMediaReference(Platform.Android);
-		#elif (!UNITY_EDITOR && UNITY_OPENHARMONY)
-			result = GetPlatformMediaReference(Platform.OpenHarmony);
 		#elif (!UNITY_EDITOR && UNITY_WEBGL)
 			result = GetPlatformMediaReference(Platform.WebGL);
 		#endif
@@ -110,9 +107,6 @@ namespace RenderHeads.Media.AVProVideo
 					break;
 				case Platform.Android:
 					result = _android;
-					break;
-				case Platform.OpenHarmony:
-					result = _openharmony;
 					break;
 				case Platform.WebGL:
 					result = _webGL;

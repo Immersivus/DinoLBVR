@@ -1,5 +1,5 @@
-//-----------------------------------------------------------------------------
-// Copyright 2012-2025 RenderHeads Ltd.  All rights reserved.
+﻿//-----------------------------------------------------------------------------
+// Copyright 2012-2024 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
 #if (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS) && UNITY_2017_1_OR_NEWER
@@ -24,10 +24,6 @@
 #define AVPROVIDEO_UNITY_DOES_NOT_SUPPORT_XCFRAMEWORKS
 #endif
 
-#if UNITY_2022_3 || UNITY_6000_0_OR_NEWER
-#define UNITY_SUPPORTS_VISIONOS
-#endif
-
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -43,7 +39,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 	{
 		const string AVProVideoPluginName = "AVProVideo.xcframework";
 
-		const string AVProVideoBootstrap = "extern void AVPUnityRegisterPlugin(void*);\nvoid AVPPluginBootstrap(void) {\n\tAVPUnityRegisterPlugin(UnityRegisterRenderingPluginV5);\n}\n";
+		const string AVProVideoBootstrap = "extern void AVPPluginUnityRegisterRenderingPlugin(void*);\nvoid AVPPluginBootstrap(void) {\n\tAVPPluginUnityRegisterRenderingPlugin(UnityRegisterRenderingPluginV5);\n}\n";
 		const string AVProVideoForceSwift = "import Foundation\n";
 
 		private class Platform
@@ -61,7 +57,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 					case BuildTarget.tvOS:
 						return new Platform(BuildTarget.tvOS, "tvOS", "f83f62879d8fb417cb18d0547c9bfd02");
-#if UNITY_SUPPORTS_VISIONOS
+#if UNITY_2022_3
 					case BuildTarget.VisionOS:
 						return new Platform(BuildTarget.VisionOS, "visionOS", "fe151797423674af0941aae11c872b90");
 #endif
@@ -191,7 +187,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			{
 				case BuildTarget.iOS:
 				case BuildTarget.tvOS:
-#if UNITY_SUPPORTS_VISIONOS
+#if UNITY_2022_3
 				case BuildTarget.VisionOS:
 #endif
 					return true;
@@ -212,52 +208,14 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				case BuildTarget.iOS:
 				case BuildTarget.tvOS:
 					return "Unity-iPhone.xcodeproj";
-			#if UNITY_SUPPORTS_VISIONOS
+#if UNITY_2022_3
 				case BuildTarget.VisionOS:
 					return "Unity-VisionOS.xcodeproj";
-			#endif
+#endif
 				default:
 					Debug.LogError($"[AVProVideo] GetXcodeProjectNameForBuildTarget - unrecognised build target: {target}");
 					return null;
 			}
-		}
-
-		/// <summary>
-		/// Gets the path to the xcode project file under the path provided
-		/// </summary>
-		/// <param name="path">Path to search under</param>
-		/// <param name="target">Build target</param>
-		/// <returns></returns>
-		private static string GetXcodeProjectPath(string path, BuildTarget target)
-		{
-			string xcodeProjectPath = null;
-			
-			try
-			{
-				IEnumerable<string> dirs = Directory.EnumerateDirectories(
-					path,
-					"*.xcodeproj",
-					SearchOption.TopDirectoryOnly
-				);
-				foreach (string dir in dirs)
-				{
-					xcodeProjectPath = dir;
-					break;
-				}
-			}
-			catch (Exception e)
-			{
-				Debug.LogError($"GetXcodeProjectPath - failed to enumerate directories, error: {e.ToString()}");
-			}
-
-			if (xcodeProjectPath == null)
-			{
-				// Default based on platform
-				string xcodeProjectName = GetXcodeProjectNameForBuildTarget(target);
-				xcodeProjectPath = Path.Combine(path, xcodeProjectName);
-			}
-			
-			return Path.Combine(xcodeProjectPath, "project.pbxproj");
 		}
 
 		// Converts the Unity asset path to the expected path in the built Xcode project.
@@ -334,12 +292,14 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			}
 
 			// Create the path to the generated Xcode project file
-			string xcodeProjectPath = GetXcodeProjectPath(path, target);
-			if (xcodeProjectPath == null)
+			string xcodeProjectName = GetXcodeProjectNameForBuildTarget(target);
+			if (xcodeProjectName == null)
 			{
 				return;
 			}
-			Debug.Log($"[AVProVideo] Opening Xcode project at: {xcodeProjectPath}");
+
+			string xcodeProjectPath = Path.Combine(path, xcodeProjectName, "project.pbxproj");
+			Debug.Log($"[AVProVideo] Opening Xcode project at: {path}");
 
 			// Open the project
 			PBXProject project = new PBXProject();
@@ -383,6 +343,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			// string xcframeworkPath = ConvertPluginAssetPathToXcodeProjectPath(pluginPath, "Frameworks");
 
 			string xcframeworkPath = string.Empty;
+
 			IReadOnlyList<string> paths = project.GetRealPathsOfAllFiles(PBXSourceTree.Source);
 			foreach (string p in paths)
 			{
@@ -399,16 +360,24 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				Debug.Log($"[AVProVideo] xcframework path is: {dest_xcframeworkPath}");
 				StripMetaFilesFromDirectory(new DirectoryInfo(dest_xcframeworkPath));
 			}
+
+			// string dest_xcframeworkPath = Path.Combine(path, xcframeworkPath);
+			// if (!project.ContainsFileByProjectPath(xcframeworkPath))
+			// {
+			// 	Debug.Log("[AVProVideo] Stripping meta files from AVProVideo.xcframework");
+			// 	StripMetaFilesFromDirectory(new DirectoryInfo(dest_xcframeworkPath));
+			// }
+			else
+			{
+				Debug.LogError($"[AVProVideo] Failed to find AVProPlugin.xcframework in the built project");
+			}
 #endif
 
-		#if !UNITY_2022_1_OR_NEWER
-			// No longer required as we directly pull in the necessary symbols in PlatformMediaPlayer.Native
 			Debug.Log("[AVProVideo] Writing AVProVideoBootstrap.m to the UnityFramework target");
 			string bootstrapPath = Path.Combine(destPluginPath, "AVProVideoBootstrap.m");
 			File.WriteAllText(Path.Combine(path, bootstrapPath), AVProVideoBootstrap);
 			string bootstrapGuid = project.AddFile(bootstrapPath, bootstrapPath);
 			project.AddFileToBuild(unityFrameworkTargetGuid, bootstrapGuid);
-		#endif
 
 			string forceSwiftPath = Path.Combine(destPluginPath, "AVProVideoForceSwift.swift");
 			Debug.Log("[AVProVideo] Writing AVProVideoForceSwift.swift to the UnityFramework target");

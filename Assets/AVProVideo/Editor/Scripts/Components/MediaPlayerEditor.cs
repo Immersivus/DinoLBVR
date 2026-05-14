@@ -1,10 +1,10 @@
-#define AVPROVIDEO_SUPPORT_LIVEEDITMODE
+﻿#define AVPROVIDEO_SUPPORT_LIVEEDITMODE
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo.Editor
@@ -99,7 +99,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			_sectionDevModeTexture.Save();
 			_sectionDevModePlaybackQuality.Save();
 			_sectionDevModeHapNotchLCDecoder.Save();
-			_sectionDevModeTimedMetadata.Save();
+			_sectionDevModeBufferedFrames.Save();
 
 			EditorPrefs.SetInt(SettingsPrefix + "PlatformIndex", _platformIndex);
 			EditorPrefs.SetBool(SettingsPrefix + "ShowAlphaChannel", _showAlpha);
@@ -136,7 +136,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.Windows).text));
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.macOS).text));
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.Android).text));
-			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.OpenHarmony).text));
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.iOS).text));
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.tvOS).text));
 			EditorPrefs.DeleteKey(AnimCollapseSection.GetPrefName(GetPlatformButtonContent(Platform.visionOS).text));
@@ -152,7 +151,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			Color platformSpecificColor = Color.HSVToRGB(0.85f, colorSaturation, 1f);
 			Color platformColor = platformSpecificColor;
 			if (EditorGUIUtility.isProSkin)
-			{
+			{ 
 				platformColor *= 0.66f;
 			}
 
@@ -176,9 +175,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.Windows), true, false, OnInspectorGUI_Override_Windows, this, platformColor, _platformSections));
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.macOS), true, false, OnInspectorGUI_Override_MacOSX, this, platformColor, _platformSections));
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.Android), true, false, OnInspectorGUI_Override_Android, this, platformColor, _platformSections));
-#if UNITY_OPENHARMONY
-			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.OpenHarmony), true, false, OnInspectorGUI_Override_OpenHarmony, this, platformColor, _platformSections));
-#endif
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.iOS), true, false, OnInspectorGUI_Override_iOS, this, platformColor, _platformSections));
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.tvOS), true, false, OnInspectorGUI_Override_tvOS, this, platformColor, _platformSections));
 			_platformSections.Add(new AnimCollapseSection(GetPlatformButtonContent(Platform.visionOS), true, false, OnInspectorGUI_Override_visionOS, this, platformColor, _platformSections));
@@ -189,7 +185,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			_sectionDevModeTexture = new AnimCollapseSection("Texture", false, false, OnInspectorGUI_DevMode_Texture, this, Color.white);
 			_sectionDevModePlaybackQuality = new AnimCollapseSection("Presentation Quality", false, false, OnInspectorGUI_DevMode_PresentationQuality, this, Color.white);
 			_sectionDevModeHapNotchLCDecoder = new AnimCollapseSection("Hap/NotchLC Decoder", false, false, OnInspectorGUI_DevMode_HapNotchLCDecoder, this, Color.white);
-			_sectionDevModeTimedMetadata = new AnimCollapseSection("Timed Metadata", false, false, OnInspectorGUI_DevMode_TimedMetadata, this, Color.white);
+			_sectionDevModeBufferedFrames = new AnimCollapseSection("Buffers", false, false, OnInspectorGUI_DevMode_BufferedFrames, this, Color.white);
 		}
 
 		private void ResolveProperties()
@@ -244,9 +240,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				case Platform.Android:
 					iconName = "BuildSettings.Android.Small";
 					break;
-				case Platform.OpenHarmony:
-					iconName = "BuildSettings.OpenHarmony.Small";
-					break;
 				case Platform.iOS:
 					iconName = "BuildSettings.iPhone.Small";
 					break;
@@ -285,11 +278,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 			// properties modified not marking the serialisedObject as dirty.  To get around this issue we use this static bool
 			// so that OnEnable can only be called once.
 			// https://answers.unity.com/questions/1216599/custom-editor-gets-created-multiple-times-and-rece.html
-		#if UNITY_2022_3_OR_NEWER
-			var remainingBuggedEditors = FindObjectsByType<MediaPlayerEditor>(FindObjectsSortMode.None);
-		#else
-			var remainingBuggedEditors = FindObjectsOfType<MediaPlayerEditor>();
-		#endif
+			var remainingBuggedEditors  = FindObjectsOfType<MediaPlayerEditor>();
 			foreach(var editor in remainingBuggedEditors)
 			{
 				if (editor == this)
@@ -485,6 +474,29 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					Application.OpenURL(LinkPurchase);
 				}
 				EditorHelper.IMGUI.EndWarningTextBox();
+			}
+
+			// Warning about not using multi-threaded rendering
+			{
+				bool showWarningMT = false;
+
+				if (/*EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.iOS ||
+					EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.tvOS ||*/
+					EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.Android)
+				{
+#if UNITY_2017_2_OR_NEWER
+					showWarningMT = !UnityEditor.PlayerSettings.GetMobileMTRendering(BuildTargetGroup.Android);
+#else
+					showWarningMT = !UnityEditor.PlayerSettings.mobileMTRendering;
+#endif
+				}
+				/*if (EditorUserBuildSettings.selectedBuildTargetGroup == BuildTargetGroup.WSA)
+				{
+				}*/
+				if (showWarningMT)
+				{
+					EditorHelper.IMGUI.WarningTextBox("Performance Warning", "Deploying to Android with multi-threaded rendering disabled is not recommended.  Enable multi-threaded rendering in the Player Settings > Other Settings panel.", Color.yellow, Color.yellow, Color.white);
+				}
 			}
 
 #if !UNITY_2019_3_OR_NEWER

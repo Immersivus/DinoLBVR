@@ -1,12 +1,10 @@
-//-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
-//-----------------------------------------------------------------------------
-
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿using UnityEngine;
 using UnityEditor;
-// using System.Collections.Generic;
-// using System.Linq;
+using System.Collections.Generic;
+
+//-----------------------------------------------------------------------------
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
+//-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo.Editor
 {
@@ -30,10 +28,8 @@ namespace RenderHeads.Media.AVProVideo.Editor
 		};
 
 		private readonly static FieldDescription _optionFileOffset = new FieldDescription(".fileOffset", GUIContent.none);
-		private readonly static FieldDescription _optionGenerateMipmaps = new FieldDescription("._generateMipmaps", new GUIContent("Generate Mipmaps", "Generate a complete mipmap chain for the output texture. Not supported when the texture format is set to OES"));
-
-		//		private readonly static FieldDescription _optionBlitTextureFiltering = new FieldDescription(".blitTextureFiltering", new GUIContent("Blit Texture Filtering", "The texture filtering used for the final internal blit."));
-		//		private readonly static FieldDescription _optionShowPosterFrames = new FieldDescription(".showPosterFrame", new GUIContent("Show Poster Frame", "Allows a paused loaded video to display the initial frame. This uses up decoder resources."));
+//		private readonly static FieldDescription _optionBlitTextureFiltering = new FieldDescription(".blitTextureFiltering", new GUIContent("Blit Texture Filtering", "The texture filtering used for the final internal blit."));
+		private readonly static FieldDescription _optionShowPosterFrames = new FieldDescription(".showPosterFrame", new GUIContent("Show Poster Frame", "Allows a paused loaded video to display the initial frame. This uses up decoder resources."));
 		private readonly static FieldDescription _optionPreferSoftwareDecoder = new FieldDescription(".preferSoftwareDecoder", GUIContent.none);
 		private readonly static FieldDescription _optionForceRtpTCP = new FieldDescription(".forceRtpTCP", GUIContent.none);
 		private readonly static FieldDescription _optionForceEnableMediaCodecAsynchronousQueueing = new FieldDescription(".forceEnableMediaCodecAsynchronousQueueing", GUIContent.none);
@@ -48,7 +44,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 		private readonly static FieldDescription _optionMaxBufferMs = new FieldDescription(".maxBufferMs", new GUIContent("Maximum Buffer Ms"));
 		private readonly static FieldDescription _optionBufferForPlaybackMs = new FieldDescription(".bufferForPlaybackMs", new GUIContent("Buffer For Playback Ms"));
 		private readonly static FieldDescription _optionBufferForPlaybackAfterRebufferMs = new FieldDescription(".bufferForPlaybackAfterRebufferMs", new GUIContent("Buffer For Playback After Rebuffer Ms"));
-		private readonly static FieldDescription _optionPrioritiseTimeOverSize = new FieldDescription(".prioritiseTimeOverSize", new GUIContent("Prioritise Time Over Size", "Enable to prioritise buffering time constraints over size constraints"));
 
 		private void OnInspectorGUI_Override_Android()
 		{
@@ -64,49 +59,36 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 				DisplayPlatformOption(optionsVarName, _optionVideoAPI);
 
-				SerializedProperty propVideoOutputMode = DisplayPlatformOption(optionsVarName, _optionVideoOutputMode);
-				if (propVideoOutputMode.enumValueIndex == (int)MediaPlayer.OptionsAndroid.VideoOutputMode.Texture)
-				{
-					SerializedProperty propTextureFormat = DisplayPlatformOption(optionsVarName, _optionTextureFormat);
-					bool isOES = propTextureFormat.enumValueIndex == (int)MediaPlayer.PlatformOptions.TextureFormat.YCbCr420_OES;
-					if (isOES)
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Info, "The OES texture format is only supported when using the OpenGL ES3 renderer, and requires special shaders.  Make sure to assign an AVPro Video OES shader type to the meshes or materials that need to display video.");
-						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "The OES texture format is not supported when using the Vulkan renderer or with the trial version of the plugin.");
-					}
-
-					// Generate mipmaps - only non-OES
-					if (!isOES)
-					{
-						SerializedProperty propGenerateMipmaps = DisplayPlatformOption(optionsVarName, _optionGenerateMipmaps);
-					}
-				}
-#if AVPRO_VIDEO_XR_COMPOSITION_LAYERS
-				else if (propVideoOutputMode.enumValueIndex == (int)MediaPlayer.OptionsAndroid.VideoOutputMode.XRCompositionLayer)
-				{
-					EditorHelper.IMGUI.NoticeBox(MessageType.Info, "XR Composition Layer requires the AVPro Video XR Composition Layers package, available here: https://u3d.as/3zoT");
-					GraphicsDeviceType[] graphicsApis = PlayerSettings.GetGraphicsAPIs(BuildTarget.Android);
-					if (graphicsApis[0] != GraphicsDeviceType.Vulkan || graphicsApis.Length > 1)
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "XR Composition Layer is only supported when using the Vulkan graphics API.");
-					}
-					SerializedProperty propTextureFormat = DisplayPlatformOption(optionsVarName, _optionTextureFormat);
-					bool isOES = propTextureFormat.enumValueIndex == (int)MediaPlayer.PlatformOptions.TextureFormat.YCbCr420_OES;
-					if (isOES)
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Info, "The video is output directly to the XR composition layer. This is the most performant mode and should be your preferred choice.");
-					}
-					else
-					{
-						EditorHelper.IMGUI.NoticeBox(MessageType.Info, "The video is rendered to the XR composition layer by the plugin. This is the most compatible mode.");
-					}
-				}
-#endif
-
 				{
 					SerializedProperty propFileOffset = DisplayPlatformOption(optionsVarName, _optionFileOffset);
 					propFileOffset.intValue = Mathf.Max(0, propFileOffset.intValue);
 				}
+
+				{
+					SerializedProperty propTextureFormat = DisplayPlatformOption(optionsVarName, _optionTextureFormat);
+					if( (MediaPlayer.PlatformOptions.TextureFormat)( propTextureFormat.enumValueIndex ) == MediaPlayer.PlatformOptions.TextureFormat.YCbCr420_OES )
+					{
+						EditorHelper.IMGUI.NoticeBox(MessageType.Info, "OES can require special shaders.  Make sure you assign an AVPro Video OES shader to your meshes/materials that need to display video.");
+
+						// PlayerSettings.virtualRealitySupported is deprecated from 2019.3
+#if !UNITY_2019_3_OR_NEWER
+						if (PlayerSettings.virtualRealitySupported)
+#endif
+						{
+							if (PlayerSettings.stereoRenderingPath != StereoRenderingPath.MultiPass)
+							{
+								EditorHelper.IMGUI.NoticeBox(MessageType.Error, "OES only supports multi-pass stereo rendering path, please change in Player Settings.");
+							}
+						}
+
+						EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "OES is not supported in the trial version.  If your Android plugin is not trial then you can ignore this warning.");
+					}
+				}
+
+//				{
+//					SerializedProperty propBlitTextureFiltering = DisplayPlatformOptionEnum(optionsVarName, _optionBlitTextureFiltering, _blitTextureFilteringAndroid);
+//					propBlitTextureFiltering.intValue = Mathf.Max(0, propBlitTextureFiltering.intValue);
+//				}
 
 				EditorGUILayout.EndVertical();
 			}
@@ -126,7 +108,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				}
 			}
 
-#if false
 			// MediaPlayer API options
 			{
 				EditorGUILayout.BeginVertical(GUI.skin.box);
@@ -136,7 +117,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 				EditorGUILayout.EndVertical();
 			}
-#endif
 
 			// ExoPlayer API options
 			{
@@ -164,7 +144,7 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 				GUILayout.Space(8f);
 
-				//				EditorGUILayout.BeginVertical();
+//				EditorGUILayout.BeginVertical();
 				EditorGUILayout.LabelField("Adaptive Stream", EditorStyles.boldLabel);
 
 				DisplayPlatformOption(optionsVarName, _optionStartMaxBitrate);
@@ -190,13 +170,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				DisplayPlatformOption(optionsVarName, _optionMaxBufferMs);
 				DisplayPlatformOption(optionsVarName, _optionBufferForPlaybackMs);
 				DisplayPlatformOption(optionsVarName, _optionBufferForPlaybackAfterRebufferMs);
-
-				var propPrioritiseTimeOverSize = DisplayPlatformOption(optionsVarName, _optionPrioritiseTimeOverSize);
-				if (propPrioritiseTimeOverSize.boolValue)
-				{
-					EditorHelper.IMGUI.NoticeBox(MessageType.Info, "Only enable this if you're exclusively playing streamed media types (HLS, or MPEG-Dash)");
-					EditorHelper.IMGUI.NoticeBox(MessageType.Warning, "May lead to OOM crashes if 'Min Buffer Ms' and 'Max Buffer Ms' are too large.");
-				}
 
 				EditorGUILayout.EndVertical();
 			}

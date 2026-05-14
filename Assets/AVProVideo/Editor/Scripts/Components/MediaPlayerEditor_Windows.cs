@@ -2,7 +2,7 @@
 using UnityEditor;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo.Editor
@@ -34,15 +34,17 @@ namespace RenderHeads.Media.AVProVideo.Editor
 
 		private readonly static FieldDescription _optionLowLatency = new FieldDescription(".useLowLatency", new GUIContent("Use Low Latency", "Provides a hint to the decoder to use less buffering - may degrade performance and quality"));
 		private readonly static FieldDescription _optionVideoAPI = new FieldDescription(".videoApi", new GUIContent("Video API", "The preferred video API to use"));
-		private readonly static FieldDescription _optionVideoOutputMode = new FieldDescription(".videoOutputMode", new GUIContent("Video Output Mode"));
 		private readonly static FieldDescription _optionTextureMips = new FieldDescription(".useTextureMips", new GUIContent("Generate Mipmaps", "Automatically create mip-maps for the texture to reducing aliasing when texture is scaled down"));
 		private readonly static FieldDescription _option10BitTextures = new FieldDescription(".use10BitTextures", new GUIContent("Use 10-Bit Textures", "Provides a hint to the decoder to use 10-bit textures - allowing more quality for videos encoded with a 10-bit profile"));
 		private readonly static FieldDescription _optionUseHardwareDecoding = new FieldDescription(".useHardwareDecoding", new GUIContent("Hardware Decoding"));
-		private readonly static FieldDescription _optionUseRendererSync = new FieldDescription(".useRendererSync", new GUIContent("Renderer Sync", "Ensure synchronisation between video textures and Unity rendering - alleviates potential playback artifacts"));
 		private readonly static FieldDescription _optionUseStereoDetection = new FieldDescription(".useStereoDetection", new GUIContent("Use Stereo Detection", "Disable if no stereo detection is required"));
 		private readonly static FieldDescription _optionUseTextTrackSupport = new FieldDescription(".useTextTrackSupport", new GUIContent("Use Text Tracks", "Disable if no text tracks are required"));
 		private readonly static FieldDescription _optionUseAudioDelay = new FieldDescription(".useAudioDelay", new GUIContent("Use Audio Delay", "Allows audio to be offset"));
 		private readonly static FieldDescription _optionUseFacebookAudio360Support = new FieldDescription(".useFacebookAudio360Support", new GUIContent("Use Facebook Audio 360", "Disable if no Facebook Audio 360 support is required for"));
+#if AVPROVIDEO_SUPPORT_BUFFERED_DISPLAY
+		private readonly static FieldDescription _optionPauseOnPrerollComplete = new FieldDescription(".pauseOnPrerollComplete", new GUIContent("Pause On Preroll Complete", "Internally pause once preroll is completed.  This is useful for syncing video playback to make sure all players are prerolled"));
+		private readonly static FieldDescription _optionBufferedFrameSelection = new FieldDescription(".bufferedFrameSelection", new GUIContent("Frame Selection", "Mode for selecting the next frame to display from the buffer fo frames"));
+#endif
 		private readonly static FieldDescription _optionUseHapNotchLC = new FieldDescription(".useHapNotchLC", new GUIContent("Use Hap/NotchLC", "Disable if no Hap/NotchLC playback is required"));
 		private readonly static FieldDescription _optionCustomMovParser = new FieldDescription(".useCustomMovParser", new GUIContent("Use Custom MOV Parser", "For playback of Hap and NotchLC media to handle high bit-rates"));
 		private readonly static FieldDescription _optionParallelFrameCount = new FieldDescription(".parallelFrameCount", new GUIContent("Parallel Frame Count", "Number of frames to decode in parallel via multi-threading.  Higher values increase latency but can improve performance for demanding videos."));
@@ -92,12 +94,23 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				GUILayout.Label("Media Foundation API Options", EditorStyles.boldLabel);
 				{
 					DisplayPlatformOption(optionsVarName, _optionUseHardwareDecoding);
-					DisplayPlatformOption(optionsVarName, _optionUseRendererSync);
 				}
 				{
 					DisplayPlatformOption(optionsVarName, _optionLowLatency);
 					DisplayPlatformOption(optionsVarName, _optionUseStereoDetection);
 					DisplayPlatformOption(optionsVarName, _optionUseTextTrackSupport);
+#if AVPROVIDEO_SUPPORT_BUFFERED_DISPLAY
+					if (_showUltraOptions)
+					{
+						SerializedProperty propBufferedFrameSelection = DisplayPlatformOption(optionsVarName, _optionBufferedFrameSelection);
+						if (propBufferedFrameSelection.enumValueIndex != (int)BufferedFrameSelectionMode.None)
+						{
+							EditorGUI.indentLevel++;
+							DisplayPlatformOption(optionsVarName, _optionPauseOnPrerollComplete);
+							EditorGUI.indentLevel--;
+						}
+					}
+#endif
 					if (_showUltraOptions)
 					{
 						SerializedProperty useHapNotchLC = DisplayPlatformOption(optionsVarName, _optionUseHapNotchLC);
@@ -256,7 +269,6 @@ namespace RenderHeads.Media.AVProVideo.Editor
 				GUILayout.Label("Media Foundation API Options", EditorStyles.boldLabel);
 
 				DisplayPlatformOption(optionsVarName, _optionUseHardwareDecoding);
-				DisplayPlatformOption(optionsVarName, _optionUseRendererSync);
 				
 				{
 					SerializedProperty propUseTextureMips = DisplayPlatformOption(optionsVarName, _optionTextureMips);

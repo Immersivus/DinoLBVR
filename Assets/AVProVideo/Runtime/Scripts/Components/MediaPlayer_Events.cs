@@ -62,9 +62,7 @@ namespace RenderHeads.Media.AVProVideo
 				!_controlInterface.IsFinished())
 			{
 				bool reset = true;
-// RJT NOTE: Commented out for now as seems over-aggressive and can lead to freeze conditions as seen in: https://github.com/RenderHeads/UnityPlugin-AVProVideo/issues/1692
-// - If we need to reinstate then we'd likely need considerably more tolerance, especially on slower machines
-#if false//UNITY_EDITOR_WIN || (!UNITY_EDITOR && (UNITY_STANDALONE_WIN || UNITY_WSA))
+#if UNITY_EDITOR_WIN || (!UNITY_EDITOR && (UNITY_STANDALONE_WIN || UNITY_WSA))
 				reset = false;
 				if (_infoInterface.HasVideo())
 				{
@@ -127,12 +125,6 @@ namespace RenderHeads.Media.AVProVideo
 				_eventState_PreviousHeight = _infoInterface.GetVideoHeight();
 			}
 
-			// Timed Metadata
-			if (FireEventIfPossible(MediaPlayerEvent.EventType.TimedMetadataChanged, false))
-			{
-
-			}
-
 			// Stalling
 			if (IsHandleEvent(MediaPlayerEvent.EventType.Stalled))
 			{
@@ -145,7 +137,6 @@ namespace RenderHeads.Media.AVProVideo
 					FireEventIfPossible(newEvent, false);
 				}
 			}
-
 			// Seeking
 			if (IsHandleEvent(MediaPlayerEvent.EventType.StartedSeeking))
 			{
@@ -158,7 +149,6 @@ namespace RenderHeads.Media.AVProVideo
 					FireEventIfPossible(newEvent, false);
 				}
 			}
-
 			// Buffering
 			if (IsHandleEvent(MediaPlayerEvent.EventType.StartedBuffering))
 			{
@@ -244,58 +234,46 @@ namespace RenderHeads.Media.AVProVideo
 				case MediaPlayerEvent.EventType.FinishedPlaying:
 					result = (!_controlInterface.IsLooping() && _controlInterface.CanPlay() && _controlInterface.IsFinished());
 					break;
-
 				case MediaPlayerEvent.EventType.MetaDataReady:
 					result = (_controlInterface.HasMetaData());
 					break;
-
 				case MediaPlayerEvent.EventType.FirstFrameReady:
 					// [MOZ 20/1/21] Removed HasMetaData check as preventing the event from being triggered on (i|mac|tv)OS
 					result = (_textureInterface != null && _controlInterface.CanPlay() /*&& _controlInterface.HasMetaData()*/ && _textureInterface.GetTextureFrameCount() > 0);
 					break;
-
 				case MediaPlayerEvent.EventType.ReadyToPlay:
 					result = (!_controlInterface.IsPlaying() && _controlInterface.CanPlay() && !_autoPlayOnStart);
 					break;
-
 				case MediaPlayerEvent.EventType.Started:
 					result = (_controlInterface.IsPlaying());
 					break;
-
 				case MediaPlayerEvent.EventType.SubtitleChange:
 				{
-					result = _previousSubtitleIndex != _subtitlesInterface.GetSubtitleIndex();
+					result = (_previousSubtitleIndex != _subtitlesInterface.GetSubtitleIndex());
 					if (!result)
 					{
 						result = _baseMediaPlayer.InternalIsChangedTextCue();
 					}
 					break;
 				}
-
 				case MediaPlayerEvent.EventType.Stalled:
 					result = _infoInterface.IsPlaybackStalled();
 					break;
-
 				case MediaPlayerEvent.EventType.Unstalled:
 					result = !_infoInterface.IsPlaybackStalled();
 					break;
-
 				case MediaPlayerEvent.EventType.StartedSeeking:
 					result = _controlInterface.IsSeeking();
 					break;
-
 				case MediaPlayerEvent.EventType.FinishedSeeking:
 					result = !_controlInterface.IsSeeking();
 					break;
-
 				case MediaPlayerEvent.EventType.StartedBuffering:
 					result = _controlInterface.IsBuffering();
 					break;
-
 				case MediaPlayerEvent.EventType.FinishedBuffering:
 					result = !_controlInterface.IsBuffering();
 					break;
-
 				case MediaPlayerEvent.EventType.ResolutionChanged:
 					result = (_infoInterface != null && (_eventState_PreviousWidth != _infoInterface.GetVideoWidth() || _eventState_PreviousHeight != _infoInterface.GetVideoHeight()));
 					break;
@@ -306,10 +284,6 @@ namespace RenderHeads.Media.AVProVideo
 
 				case MediaPlayerEvent.EventType.Unpaused:
 					result = !_controlInterface.IsPaused();
-					break;
-
-				case MediaPlayerEvent.EventType.TimedMetadataChanged:
-					result = _baseMediaPlayer.HasNewTimedMetadataItem();
 					break;
 
 				default:

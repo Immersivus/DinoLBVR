@@ -1,7 +1,3 @@
-//-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
-//-----------------------------------------------------------------------------
-
 // UnityEngine.UI was moved to a package in 2019.2.0
 // Unfortunately no way to test for this across all Unity versions yet
 // You can set up the asmdef to reference the new package, but the package doesn't
@@ -10,23 +6,28 @@
 #if (UNITY_2019_2_OR_NEWER && AVPRO_PACKAGE_UNITYUI) || (!UNITY_2019_2_OR_NEWER)
 
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS
-#define UNITY_PLATFORM_SUPPORTS_YPCBCR
+	#define UNITY_PLATFORM_SUPPORTS_YPCBCR
 #endif
 
-#define UNITY_PLATFORM_SUPPORTS_LINEAR
-
-#if (!UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN) && (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID)
-#define UNITY_PLATFORM_SUPPORTS_VIDEOTRANSFORM
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || (UNITY_WEBGL && UNITY_2017_2_OR_NEWER)
+	#define UNITY_PLATFORM_SUPPORTS_LINEAR
 #endif
 
+#if (!UNITY_STANDALONE_WIN && !UNITY_EDITOR_WIN) && (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_ANDROID)
+	#define UNITY_PLATFORM_SUPPORTS_VIDEOTRANSFORM
+#endif
 #if (UNITY_EDITOR_WIN || (!UNITY_EDITOR && UNITY_STANDALONE_WIN))
-#define UNITY_PLATFORM_SUPPORTS_VIDEOASPECTRATIO
+	#define UNITY_PLATFORM_SUPPORTS_VIDEOASPECTRATIO
 #endif
 
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
+
+//-----------------------------------------------------------------------------
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
+//-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo
 {
@@ -35,7 +36,6 @@ namespace RenderHeads.Media.AVProVideo
 	/// </summary>
 	[HelpURL("http://renderheads.com/products/avpro-video/")]
 	[AddComponentMenu("AVPro Video/Display uGUI", 200)]
-	[RequireComponent(typeof(CanvasRenderer))]
 	//[ExecuteInEditMode]
 	public class DisplayUGUI : MaskableGraphic
 	{
@@ -112,13 +112,6 @@ namespace RenderHeads.Media.AVProVideo
 
 		private List<UIVertex> _vertices = new List<UIVertex>(4);
 		private static List<int> QuadIndices = new List<int>(new int[] { 0, 1, 2, 2, 3, 0 });
-
-		private Vector4 _drawingDimensions = Vector4.zero;
-
-		public Vector4 DrawingDimensions
-		{
-			get => _drawingDimensions;
-		}
 
 		protected override void Awake()
 		{
@@ -244,12 +237,11 @@ namespace RenderHeads.Media.AVProVideo
 			{
 				switch (_mediaPlayer.TextureProducer.GetTextureStereoPacking())
 				{
-					case StereoPacking.Monoscopic:
+					case StereoPacking.None:
 						break;
 					case StereoPacking.LeftRight:
 					case StereoPacking.TopBottom:
-					case StereoPacking.MultiviewLeftPrimary:
-					case StereoPacking.MultiviewRightPrimary:
+					case StereoPacking.TwoTextures:
 						result = EnsureStereoPackingShader();
 						break;
 				}
@@ -536,7 +528,6 @@ namespace RenderHeads.Media.AVProVideo
 
 			Rect uvRect = _uvRect;
 			Vector4 v = GetDrawingDimensions(_scaleMode, ref uvRect);
-			_drawingDimensions = v;
 
 #if UNITY_PLATFORM_SUPPORTS_VIDEOTRANSFORM
 			Matrix4x4 m = Matrix4x4.identity;

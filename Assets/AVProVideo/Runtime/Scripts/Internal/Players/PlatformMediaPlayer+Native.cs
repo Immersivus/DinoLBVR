@@ -1,48 +1,8 @@
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2024 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS
-#endif
-
-#if !UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_OPENHARMONY)
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_IOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_TVOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_TVOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_VISIONOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_VISIONOS
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_ANDROID
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE && UNITY_OPENHARMONY
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_TVOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_VISIONOS
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_APPLE
-#endif
-
-#if UNITY_2017_2_OR_NEWER && (AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS || AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MOBILE)
-#define AVPRO_VIDEO_PLATFORMMEDIAPLAYER_SUPPORTED
-#endif
-
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_SUPPORTED
+#if UNITY_2017_2_OR_NEWER && (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || (!UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID)))
 
 using System;
 using System.Runtime.InteropServices;
@@ -54,15 +14,14 @@ namespace RenderHeads.Media.AVProVideo
 	{
 		internal partial struct Native
 		{
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_MACOS
+#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 			private const string PluginName = "AVProVideo";
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
+#elif UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS
 			private const string PluginName = "__Internal";
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
+#elif UNITY_ANDROID
 			private const string PluginName = "AVProVideo2Native";
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-			private const string PluginName = "avprovideolib";
 #endif
+
 			internal const int kAVPPlayerRenderEventId = 0x5d5ac000;
 			internal const int kAVPPlayerRenderEventMask = 0x7ffff000;
 			internal const int kAVPPlayerRenderEventTypeMask = 0x00000f00;
@@ -85,10 +44,6 @@ namespace RenderHeads.Media.AVProVideo
 			{
 				AndroidUseOESFastPath = 1 << 0,
 				LinearColourSpace     = 1 << 1,
-				GenerateMipmaps       = 1 << 2,
-#if AVPRO_VIDEO_XR_COMPOSITION_LAYERS
-				XRCompositionLayer    = 1 << 3,
-#endif
 			}
 
 			// Video settings
@@ -102,29 +57,11 @@ namespace RenderHeads.Media.AVProVideo
 				MediaPlayer = Android.VideoApi.MediaPlayer,
 				ExoPlayer = Android.VideoApi.ExoPlayer,
 			}
-
-			internal enum AVPPlayerVideoOutputMode: int
-			{
-				// Default output mode, to a texture
-				Texture,
-
-				// Android - XR composition layer
-#if AVPRO_VIDEO_XR_COMPOSITION_LAYERS
-				XRCompositionLayer = Android.VideoOutputMode.XRCompositionLayer
-#endif
-			}
-
 			internal enum AVPPlayerVideoPixelFormat: int
 			{
 				Invalid,
 				Bgra,
 				YCbCr420
-			}
-
-			[Flags]
-			internal enum AVPPlayerFeatureFlags: int
-			{
-				Caching = 1 << 0,
 			}
 
 			[Flags]
@@ -150,14 +87,13 @@ namespace RenderHeads.Media.AVProVideo
 			// Network settings
 
 			[Flags]
-			internal enum AVPPlayerNetworkSettingsFlags : int
+			internal enum AVPPlayerNetworkSettingsFlags: int
 			{
-				None = 0,
-				PlayWithoutBuffering = 1 << 0,
-				UseSinglePlayerItem = 1 << 1,
+				None                     = 0,
+				PlayWithoutBuffering     = 1 << 0,
+				UseSinglePlayerItem      = 1 << 1,
 				ForceStartHighestBitrate = 1 << 2,
-				ForceRtpTCP = 1 << 3,
-				PrioritizeTimeOverSize = 1 << 4,
+				ForceRtpTCP              = 1 << 3,
 			}
 
 			// NOTE: The layout of this structure is important - if adding anything put it at the end, make sure alignment is 4 bytes and DO NOT USE bool
@@ -234,13 +170,11 @@ namespace RenderHeads.Media.AVProVideo
 				UpdatedSeekableTimeRanges = 1 << 19,
 				UpdatedText               = 1 << 20,
 				UpdatedTextureTransform   = 1 << 21,
-				UpdatedTimedMetadata      = 1 << 22,
 
 				HasVideo                  = 1 << 24,
 				HasAudio                  = 1 << 25,
 				HasText                   = 1 << 26,
 				HasMetadata               = 1 << 27,
-				HasVariants               = 1 << 28,
 
 				Failed                    = 1 << 31
 			}
@@ -268,11 +202,6 @@ namespace RenderHeads.Media.AVProVideo
 			{
 				internal float width;
 				internal float height;
-				public static readonly AVPPlayerSize Zero = new ()
-				{
-					width = 0.0f,
-					height = 0.0f
-				};
 			}
 
 			[StructLayout(LayoutKind.Sequential)]
@@ -284,27 +213,12 @@ namespace RenderHeads.Media.AVProVideo
 				internal float d;
 				internal float tx;
 				internal float ty;
-
-				public static readonly AVPAffineTransform Identity = new()
-				{
-					a = 1.0f,
-					b = 0.0f, 
-					c = 0.0f, 
-					d = 1.0f, 
-					tx = 0.0f, 
-					ty = 0.0f
-				};
-
-				public override string ToString()
-				{
-					return $"{{ {a}, {b}, {c}, {d}, {tx}, {ty} }}";
-				}
-            }
+			}
 
 			[Flags]
 			internal enum AVPPlayerAssetFlags : int
 			{
-				None = 0,
+				None                  = 0,
 				CompatibleWithAirPlay = 1 << 0,
 			};
 
@@ -317,7 +231,6 @@ namespace RenderHeads.Media.AVProVideo
 				internal int videoTrackCount;
 				internal int audioTrackCount;
 				internal int textTrackCount;
-				internal int variantCount;
 				internal AVPPlayerAssetFlags flags;
 			}
 
@@ -329,14 +242,12 @@ namespace RenderHeads.Media.AVProVideo
 
 			internal enum AVPPlayerVideoTrackStereoMode: int
 			{
-				Unknown = -1,
+				Unknown,
 				Monoscopic,
 				StereoscopicTopBottom,
 				StereoscopicLeftRight,
 				StereoscopicCustom,
 				StereoscopicRightLeft,
-				StereoscopicMultiviewLeftPrimary,
-				StereoscopicMultiviewRightPrimary,
 			}
 
 			[Flags]
@@ -363,23 +274,6 @@ namespace RenderHeads.Media.AVProVideo
 				internal AVPPlayerVideoTrackFlags videoTrackFlags;
 
 				internal Matrix4x4 yCbCrTransform;
-
-				public static readonly AVPPlayerVideoTrackInfo Default = new()
-				{
-					name = null,
-					language = null,
-					trackId = -1,
-					estimatedDataRate = 0,
-					codecSubtype = 0,
-					flags = 0,
-					dimensions = AVPPlayerSize.Zero,
-					frameRate = 0.0f,
-					transform = AVPAffineTransform.Identity,
-					stereoMode = AVPPlayerVideoTrackStereoMode.Unknown,
-					bitsPerComponent = 0,
-					videoTrackFlags = 0,
-					yCbCrTransform = Matrix4x4.identity
-				};
 			}
 
 			[StructLayout(LayoutKind.Sequential)]
@@ -396,20 +290,6 @@ namespace RenderHeads.Media.AVProVideo
 				internal uint channelCount;
 				internal uint channelLayoutTag;
 				internal AudioChannelMaskFlags channelBitmap;
-
-				public static readonly AVPPlayerAudioTrackInfo Default = new()
-				{
-					name = null,
-					language = null,
-					trackId = -1,
-					estimatedDataRate = 0,
-					codecSubtype = 0,
-					flags = 0,
-					sampleRate = 0.0,
-					channelCount = 0,
-					channelLayoutTag = 0,
-					channelBitmap = AudioChannelMaskFlags.Unspecified
-				};
 			}
 
 			[StructLayout(LayoutKind.Sequential)]
@@ -421,38 +301,6 @@ namespace RenderHeads.Media.AVProVideo
 				internal float estimatedDataRate;
 				internal uint codecSubtype;
 				internal AVPPlayerTrackFlags flags;
-
-				public static readonly AVPPlayerTextTrackInfo Default = new()
-				{
-					name = null,
-					language = null,
-					trackId = -1,
-					estimatedDataRate = 0,
-					codecSubtype = 0,
-					flags = 0
-				};
-			}
-
-			internal enum AVPPlayerVideoRange : int
-			{
-				SDR,
-				HLG,
-				PQ
-			}
-
-			[StructLayout(LayoutKind.Sequential)]
-			internal struct AVPPlayerVariantInfo
-			{
-				// Video
-				internal int averageDataRate;
-				internal int peakDataRate;
-				internal CodecType videoCodecType;
-				internal float frameRate;
-				internal AVPPlayerSize dimensions;
-				internal AVPPlayerVideoRange videoRange;
-
-				// Audio
-				internal CodecType audioCodecType;
 			}
 
 			[StructLayout(LayoutKind.Sequential)]
@@ -474,7 +322,6 @@ namespace RenderHeads.Media.AVProVideo
 				internal int bufferedTimeRangesCount;
 				internal int seekableTimeRangesCount;
 				internal int audioCaptureBufferedSamplesCount;
-				internal int selectedVariant;
 			}
 
 			internal enum AVPPlayerTextureFormat: int
@@ -493,7 +340,6 @@ namespace RenderHeads.Media.AVProVideo
 				RG16,
 				BGR10XR,
 				RGBA16Float,
-				AndroidOES,
 			}
 
 			[StructLayout(LayoutKind.Sequential)]
@@ -512,7 +358,6 @@ namespace RenderHeads.Media.AVProVideo
 				Flipped   = 1 << 0,
 				Linear    = 1 << 1,
 				Mipmapped = 1 << 2,
-				YCbCr     = 1 << 3,
 			}
 
 			internal enum AVPPlayerTextureYCbCrMatrix: int
@@ -525,14 +370,14 @@ namespace RenderHeads.Media.AVProVideo
 			[StructLayout(LayoutKind.Sequential)]
 			internal struct AVPPlayerTexture
 			{
-				[MarshalAs(UnmanagedType.ByValArray, SizeConst=4)]
+				[MarshalAs(UnmanagedType.ByValArray, SizeConst=2)]
 				internal AVPPlayerTexturePlane[] planes;
 				internal long itemTime;
-				internal int frameCounter;
+				internal int frameCount;
 				internal int planeCount;
 				internal AVPPlayerTextureFlags flags;
 				internal AVPPlayerTextureYCbCrMatrix YCbCrMatrix;
-			}
+			};
 
 			[StructLayout(LayoutKind.Sequential)]
 			internal struct AVPPlayerText
@@ -541,56 +386,24 @@ namespace RenderHeads.Media.AVProVideo
 				internal long itemTime;
 				internal int length;
 				internal int sequence;
-			}
+			};
 
-			[StructLayout(LayoutKind.Sequential)]
-			internal struct AVPPlayerTimedMetadata
-			{
-				internal IntPtr buffer;
-				internal long itemTime;
-				internal int length;
-			}
-
-			internal enum AVPPlayerTrackType : int
+			internal enum AVPPlayerTrackType: int
 			{
 				Video,
 				Audio,
 				Text
-			}
+			};
 
 			internal static string GetPluginVersion()
 			{
 				return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(AVPPluginGetVersionStringPointer());
 			}
 
-#if AVPRO_VIDEO_PLATFORMMEDIAPLAYER_IPHONE
-	#if UNITY_2022_1_OR_NEWER
-			[DllImport(PluginName)]
-			internal static extern void AVPUnityRegisterPlugin(IntPtr fn);
-
-			delegate void UnityRegisterPluginDelegate(IntPtr loadFn, IntPtr unloadFn);
-
-		#if UNITY_6000_0_OR_NEWER
-			private const string UnityRegisterPluginEntryPoint = "UnityRegisterPlugin";
-		#else
-			private const string UnityRegisterPluginEntryPoint = "UnityRegisterRenderingPluginV5";
-		#endif
-
-			[DllImport(PluginName, EntryPoint = UnityRegisterPluginEntryPoint)]
-			[AOT.MonoPInvokeCallback(typeof(UnityRegisterPluginDelegate))]
-			internal static extern void UnityRegisterPlugin(IntPtr loadFn, IntPtr unloadFn);
-
-			internal static void AVPPluginBootstrap()
-			{
-				UnityRegisterPluginDelegate unityRegisterPluginDelegate = UnityRegisterPlugin;
-				IntPtr pFn = Marshal.GetFunctionPointerForDelegate(unityRegisterPluginDelegate);
-				AVPUnityRegisterPlugin(pFn);
-			}
-	#else
+#if !UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS)
 			[DllImport(PluginName)]
 			internal static extern void AVPPluginBootstrap();
-	#endif
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_ANDROID
+#elif !UNITY_EDITOR && (UNITY_ANDROID)
 			internal static void AVPPluginBootstrap()
 			{
 				AndroidJavaClass activityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -608,13 +421,6 @@ namespace RenderHeads.Media.AVProVideo
 				}
 				// TODO: Handle failure?
 			}
-#elif AVPRO_VIDEO_PLATFORMMEDIAPLAYER_OPENHARMONY
-			internal static void AVPPluginBootstrap()
-			{
-				Debug.Log("UNITY_OPENHARMONY: Calling Bootstrap");
-				OpenHarmonyJSClass openHarmonyJSClass = new OpenHarmonyJSClass("Manager");
-		        openHarmonyJSClass.CallStatic( "Bootstrap" );
-			}
 #endif
 
 			[DllImport(PluginName)]
@@ -628,9 +434,6 @@ namespace RenderHeads.Media.AVProVideo
 
 			[DllImport(PluginName)]
 			internal static extern void AVPPlayerRelease(IntPtr player);
-
-			[DllImport(PluginName)]
-			internal static extern AVPPlayerFeatureFlags AVPPlayerGetSupportedFeatures(IntPtr player);
 
 			[DllImport(PluginName)]
 			internal static extern void AVPPlayerUpdate(IntPtr _player);
@@ -653,12 +456,6 @@ namespace RenderHeads.Media.AVProVideo
 			[DllImport(PluginName)]
 			internal static extern void AVPPlayerGetTextTrackInfo(IntPtr player, int index, ref AVPPlayerTextTrackInfo info);
 
-			[DllImport( PluginName )]
-			internal static extern void AVPPlayerGetVariantInfo(IntPtr player, int index, ref AVPPlayerVariantInfo info);
-
-			[DllImport( PluginName )]
-			internal static extern void AVPPlayerSelectVariant(IntPtr player, int index);
-
 			[DllImport(PluginName)]
 			internal static extern void AVPPlayerGetBufferedTimeRanges(IntPtr player, AVPPlayerTimeRange[] ranges, int count);
 
@@ -672,11 +469,8 @@ namespace RenderHeads.Media.AVProVideo
 			internal static extern void AVPPlayerGetText(IntPtr player, ref AVPPlayerText text);
 
 			[DllImport(PluginName)]
-			internal static extern void AVPPlayerGetTimedMetadata(IntPtr player, ref AVPPlayerTimedMetadata timedMetadata);
-
-			[DllImport(PluginName)]
 			internal static extern void AVPPlayerSetPlayerSettings(IntPtr player, AVPPlayerSettings settings);
-
+			
 			[DllImport(PluginName)]
 			[return: MarshalAs(UnmanagedType.U1)]
 			internal static extern bool AVPPlayerOpenURL(IntPtr player, string url, string headers, AVPPlayerOpenOptions options);
@@ -733,30 +527,24 @@ namespace RenderHeads.Media.AVProVideo
 			public struct MediaCachingOptions
 			{
 				public double minimumRequiredBitRate;
-				public float minimumRequiredResolution_width;
-				public float minimumRequiredResolution_height;
+				public float  minimumRequiredResolution_width;
+				public float  minimumRequiredResolution_height;
 				public string title;
 				public IntPtr artwork;
-				public int artworkLength;
+				public int    artworkLength;
 			}
 
 			[DllImport(PluginName)]
-			public static extern void AVPPlayerCacheMediaForURL(IntPtr player, string url, string headers, MediaCachingOptions options);
+			public static extern void AVPPluginCacheMediaForURL(string url, string headers, MediaCachingOptions options);
 
 			[DllImport(PluginName)]
-			public static extern void AVPPlayerCancelDownloadOfMediaForURL(IntPtr player, string url);
+			public static extern void AVPPluginCancelDownloadOfMediaForURL(string url);
 
 			[DllImport(PluginName)]
-			public static extern void AVPPlayerPauseDownloadOfMediaForURL(IntPtr player, string url);
+			public static extern void AVPPluginRemoveCachedMediaForURL(string url);
 
 			[DllImport(PluginName)]
-			public static extern void AVPPlayerResumeDownloadOfMediaForURL(IntPtr player, string url);
-
-			[DllImport(PluginName)]
-			public static extern void AVPPlayerRemoveCachedMediaForURL(IntPtr player, string url);
-
-			[DllImport(PluginName)]
-			public static extern int AVPPlayerGetCachedMediaStatusForURL(IntPtr player, string url, ref float progress);
+			public static extern int AVPPluginGetCachedMediaStatusForURL(string url, ref float progress);
 		}
 	}
 }

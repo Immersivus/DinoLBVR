@@ -1,10 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using UnityEditor.Build;
 using System.Collections.Generic;
 
 //-----------------------------------------------------------------------------
-// Copyright 2015-2025 RenderHeads Ltd.  All rights reserved.
+// Copyright 2015-2021 RenderHeads Ltd.  All rights reserved.
 //-----------------------------------------------------------------------------
 
 namespace RenderHeads.Media.AVProVideo.Editor
@@ -70,16 +69,8 @@ namespace RenderHeads.Media.AVProVideo.Editor
 		/// </summary>
 		internal static bool HasScriptDefine(string define, BuildTargetGroup buildTarget = BuildTargetGroup.Unknown)
 		{
-			if (buildTarget == BuildTargetGroup.Unknown)
-			{
-				buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;
-			}
-		#if UNITY_6000_0_OR_NEWER
-			NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTarget);
-			string defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
-		#else
+			if (buildTarget == BuildTargetGroup.Unknown) { buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup; }
 			string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTarget);
-		#endif
 			return defines.Contains(define);
 		}
 
@@ -88,24 +79,12 @@ namespace RenderHeads.Media.AVProVideo.Editor
 		/// </summary>
 		internal static void AddScriptDefine(string define, BuildTargetGroup buildTarget = BuildTargetGroup.Unknown)
 		{
-			if (buildTarget == BuildTargetGroup.Unknown)
-			{
-				buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;
-			}
-		#if UNITY_6000_0_OR_NEWER
-			NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTarget);
-			string defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
-		#else
+			if (buildTarget == BuildTargetGroup.Unknown) { buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup; }
 			string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTarget);
-		#endif
 			if (!defines.Contains(define))
 			{
 				defines += ";" + define + ";";
-		#if UNITY_6000_0_OR_NEWER
-				PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, defines);
-		#else
 				PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTarget, defines);
-		#endif
 			}
 		}
 
@@ -114,24 +93,12 @@ namespace RenderHeads.Media.AVProVideo.Editor
 		/// </summary>
 		internal static void RemoveScriptDefine(string define, BuildTargetGroup buildTarget = BuildTargetGroup.Unknown)
 		{
-			if (buildTarget == BuildTargetGroup.Unknown)
-			{
-				buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;
-			}
-		#if UNITY_6000_0_OR_NEWER
-			NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTarget);
-			string defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
-		#else
+			if (buildTarget == BuildTargetGroup.Unknown) { buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup; }
 			string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTarget);
-		#endif
 			if (defines.Contains(define))
 			{
 				defines = defines.Replace(define, "");
-		#if UNITY_6000_0_OR_NEWER
-				PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, defines);
-		#else
 				PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTarget, defines);
-		#endif
 			}
 		}
 

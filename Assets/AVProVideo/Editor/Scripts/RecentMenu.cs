@@ -242,22 +242,19 @@ namespace RenderHeads.Media.AVProVideo.Editor
 					// Filter by type
 					for (int i = 0; i < allFiles.Length; i++)
 					{
-						string file = allFiles[i];
 						bool remove = false;
-						if (file.EndsWith(".meta", System.StringComparison.InvariantCultureIgnoreCase))
+						if (allFiles[i].EndsWith(".meta", System.StringComparison.InvariantCultureIgnoreCase))
 						{
 							remove = true;
 						}
+
 #if UNITY_EDITOR_OSX
-						remove = remove || file.EndsWith(".DS_Store");
+						remove = remove || allFiles[i].EndsWith(".DS_Store");
 #endif
+
 						if (!remove)
 						{
-#if UNITY_EDITOR_WIN
-							// Using Directory.GetFiles returns paths with \ in so correct this to be /
-							file = file.Replace("\\", "/");
-#endif
-							files.Add(file);
+							files.Add(allFiles[i]);
 						}
 					}
 				}
