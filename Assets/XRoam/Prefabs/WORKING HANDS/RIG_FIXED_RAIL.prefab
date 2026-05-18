@@ -352,54 +352,72 @@ MonoBehaviour:
   - knotIndex: 0
     waitTime: 3
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 1
     waitTime: 6
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 2
     waitTime: 5
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 3
     waitTime: 10
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 4
     waitTime: 25
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 5
     waitTime: 85
     speedToKnot: 0.7
+    maxRotationSpeed: 5
   - knotIndex: 10
     waitTime: 30
     speedToKnot: 0.45
+    maxRotationSpeed: 5
   - knotIndex: 11
     waitTime: 4
     speedToKnot: 0.5
+    maxRotationSpeed: 5
   - knotIndex: 12
     waitTime: 15
     speedToKnot: 0.35
+    maxRotationSpeed: 5
   - knotIndex: 15
     waitTime: 30
     speedToKnot: 0.35
+    maxRotationSpeed: 5
   - knotIndex: 16
     waitTime: 4
     speedToKnot: 0.5
+    maxRotationSpeed: 5
   - knotIndex: 17
     waitTime: 90
     speedToKnot: 0.35
+    maxRotationSpeed: 5
   - knotIndex: 20
     waitTime: 30
     speedToKnot: 0.4
+    maxRotationSpeed: 5
   - knotIndex: 22
     waitTime: 65
     speedToKnot: 0.25
+    maxRotationSpeed: 5
   - knotIndex: 24
     waitTime: 30
     speedToKnot: 0.6
+    maxRotationSpeed: 5
   - knotIndex: 25
     waitTime: 10
     speedToKnot: 0.6
+    maxRotationSpeed: 5
   maxSpeed: 0.7
   acceleration: 0.5
   deceleration: 6
+  rotationAcceleration: 180
+  rotationDeceleration: 360
 --- !u!1 &6028824974181279210
 GameObject:
   m_ObjectHideFlags: 0

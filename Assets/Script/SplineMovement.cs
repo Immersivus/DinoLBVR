@@ -23,6 +23,13 @@ public class SplineMovement : MonoBehaviour
     public float deceleration = 6f;
 
     private float currentSpeed = 0f;
+
+    public float rotationAcceleration = 180f;
+    public float rotationDeceleration = 360f;
+
+    private float currentAngularSpeed = 0f;
+
+    private Quaternion targetRotation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
     {
@@ -94,7 +101,79 @@ public class SplineMovement : MonoBehaviour
             );
         }
 
-        Debug.Log(distanceToStop);
+        RotateTowardsNextKnot(stops[currentStopIndex]);
+    }
+
+    void RotateTowardsNextKnot(SplineStop currentStop)
+    {
+        int nextKnotIndex =
+            Mathf.Min(
+                currentStop.knotIndex,
+                splineContainer.Spline.Count - 1
+            );
+
+        Vector3 nextKnotPos =
+            splineContainer.transform.TransformPoint(
+                splineContainer.Spline[nextKnotIndex].Position
+            );
+
+        Vector3 direction =
+            (nextKnotPos - transform.position).normalized;
+
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        targetRotation =
+            Quaternion.LookRotation(direction);
+
+        float angleRemaining =
+            Quaternion.Angle(
+                transform.rotation,
+                targetRotation
+            );
+
+        if (angleRemaining < 0.1f)
+        {
+            transform.rotation = targetRotation;
+            return;
+        }
+
+        float stoppingAngle =
+            (currentAngularSpeed * currentAngularSpeed) /
+            (2f * rotationDeceleration);
+
+        // Accelerate or decelerate
+        if (angleRemaining <= stoppingAngle)
+        {
+            currentAngularSpeed = Mathf.MoveTowards(
+                currentAngularSpeed,
+                0f,
+                rotationDeceleration * Time.deltaTime
+            );
+        }
+        else
+        {
+            currentAngularSpeed = Mathf.MoveTowards(
+                currentAngularSpeed,
+                currentStop.maxRotationSpeed,
+                rotationAcceleration * Time.deltaTime
+            );
+        }
+
+        float rotationStep =
+            Mathf.Min(
+                currentAngularSpeed * Time.deltaTime,
+                angleRemaining
+            );
+
+        transform.rotation =
+            Quaternion.RotateTowards(
+                transform.rotation,
+                targetRotation,
+                rotationStep
+            );
     }
 
     void CheckStops(float distanceToStop)
@@ -146,4 +225,5 @@ public class SplineStop
     public int knotIndex;
     public float waitTime;
     public float speedToKnot;
+    public float maxRotationSpeed = 10f;
 }
