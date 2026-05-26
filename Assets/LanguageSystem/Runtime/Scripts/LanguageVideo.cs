@@ -32,6 +32,7 @@ namespace Univrse.Studio.LanguageSystemV2
             {
                 mediaPlayer.OpenMedia(true);
                 mediaPlayer.Play();
+                mediaPlayer.AudioMuted = true;
             }
         }
 

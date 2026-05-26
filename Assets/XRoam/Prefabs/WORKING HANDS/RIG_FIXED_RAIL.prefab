@@ -175,13 +175,14 @@ GameObject:
   - component: {fileID: 2560542808087553555}
   - component: {fileID: 7139524705585242738}
   - component: {fileID: 5315772367845567375}
+  - component: {fileID: -3136347988389029646}
   m_Layer: 27
   m_Name: RIG_FIXED_RAIL
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8154251825334606161
 Transform:
   m_ObjectHideFlags: 0
@@ -418,6 +419,29 @@ MonoBehaviour:
   deceleration: 6
   rotationAcceleration: 180
   rotationDeceleration: 360
+--- !u!114 &-3136347988389029646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875069071626153115}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a074d529cf945029ef7cf40540c9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_LoopMode: 1
+  m_Method: 1
+  m_Duration: 1
+  m_MaxSpeed: 1
+  m_EasingMode: 0
+  m_AlignmentMode: 1
+  m_ObjectForwardAxis: 2
+  m_ObjectUpAxis: 1
+  m_StartOffset: 0
 --- !u!1 &6028824974181279210
 GameObject:
   m_ObjectHideFlags: 0
