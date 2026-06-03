@@ -313,7 +313,7 @@ MonoBehaviour:
     m_Start: 1
     m_ClipIn: 0
     m_Asset: {fileID: 2193689885648280225}
-    m_Duration: 49
+    m_Duration: 46
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -379,10 +379,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Digging Site
   - m_Version: 1
-    m_Start: 50
+    m_Start: 47
     m_ClipIn: 0
     m_Asset: {fileID: 7849309662080839811}
-    m_Duration: 14.033333333333335
+    m_Duration: 17.033333333333335
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
     m_Start: 357.8166666666667
     m_ClipIn: 0
     m_Asset: {fileID: -2420949845216420564}
-    m_Duration: 60.00000000000003
+    m_Duration: 55
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7641996738057924466}
     m_EaseInDuration: 0
@@ -844,7 +844,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Deep Ocean
   - m_Version: 1
-    m_Start: 417.81666666666683
+    m_Start: 412.8166666666667
     m_ClipIn: 0
     m_Asset: {fileID: 1220633792343118507}
     m_Duration: 64.9000000000002
@@ -862,25 +862,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -895,7 +877,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Digging Site 2
   - m_Version: 1
-    m_Start: 482.71666666666704
+    m_Start: 477.7166666666669
     m_ClipIn: 0
     m_Asset: {fileID: 1820865391487249378}
     m_Duration: 1.3333333333332575
@@ -907,25 +889,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1806,7 +1770,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Transition Portal 1
   - m_Version: 1
-    m_Start: 410.72825984498206
+    m_Start: 405.7282598449847
     m_ClipIn: 0
     m_Asset: {fileID: -3135487061299208551}
     m_Duration: 12.221740155015283
@@ -2255,7 +2219,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: TM TRANSITION
   - m_Version: 1
-    m_Start: 53.583333333333336
+    m_Start: 49
     m_ClipIn: 0
     m_Asset: {fileID: -3203257427565804773}
     m_Duration: 2
@@ -2901,25 +2865,61 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 351.28333333333336
+    m_Start: 349.3833333333333
     m_ClipIn: 0
     m_Asset: {fileID: 1240405967687733774}
-    m_Duration: 66.64999999999628
+    m_Duration: 63.4333666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4780974452702939109}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.5333666666666659
-    m_BlendOutDuration: 0.1166666666628089
+    m_BlendInDuration: 3.4333666666667
+    m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -2934,15 +2934,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Environment Underwater Clip
   - m_Version: 1
-    m_Start: 417.81666666666683
+    m_Start: 412.8167
     m_ClipIn: 0
     m_Asset: {fileID: -4358221371654270099}
-    m_Duration: 66.23333333333346
+    m_Duration: 66.11669999999634
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4780974452702939109}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.1166666666628089
+    m_BlendInDuration: -1
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -2985,25 +2985,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -3021,7 +3003,7 @@ MonoBehaviour:
     m_Start: 142.0667
     m_ClipIn: 0
     m_Asset: {fileID: 3507616128577513476}
-    m_Duration: 72.2999999999999
+    m_Duration: 64.73330000000001
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4780974452702939109}
     m_EaseInDuration: 0
@@ -3060,7 +3042,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 1.5333666666666659
+    m_BlendOutDuration: 3.4333666666667
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -3102,10 +3084,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Environment Empty
   - m_Version: 1
-    m_Start: 214.3666999999999
+    m_Start: 206.80000000000007
     m_ClipIn: 0
     m_Asset: {fileID: -225333415293360400}
-    m_Duration: 77.6666000000001
+    m_Duration: 85.23329999999993
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4780974452702939109}
     m_EaseInDuration: 0

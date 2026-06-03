@@ -26,9 +26,9 @@ public class BookTrack : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        if(playerTransform == null)
+        /*if(playerTransform == null)
         {
             playerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
@@ -39,10 +39,8 @@ public class BookTrack : MonoBehaviour
                 StartCoroutine(MoveToPlayer());
                 tracking = true;
             }
-
-            Vector3 newPosition = new Vector3(playerTransform.position.x, playerTransform.position.y, playerTransform.position.z);
-            transform.position = newPosition;
-        }
+           
+        }*/
     }
 
     IEnumerator MoveToPlayer()
@@ -50,7 +48,9 @@ public class BookTrack : MonoBehaviour
         while (true)
         {
             Quaternion stabilizedRotation = new Quaternion(transform.rotation.x, playerTransform.rotation.y, transform.rotation.z, playerTransform.rotation.w);
+            Vector3 newPosition = new Vector3(playerTransform.position.x, playerTransform.position.y, playerTransform.position.z);
             transform.rotation = Quaternion.Lerp(transform.rotation, stabilizedRotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime);
             yield return null;
         }
     }
